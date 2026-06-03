@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CS4GATE admin control panel for managing questions, users, media, moderation, and publishing.">
+  <meta name="robots" content="noindex, nofollow">
+  <script src="auth-guard.js?v=20260518safe" data-require="admin" data-public-target="index.html" data-upgrade-target="paid.html"></script>
+  <title>Admin Dashboard - CS4GATE</title>
+  <link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="admin-app" data-admin-page="true">
+  <header class="admin-topbar">
+    <div class="admin-topbar-left">
+      <button class="admin-icon-btn" id="adminMenuToggle" aria-label="Open admin menu"><i class="fas fa-bars"></i></button>
+      <div class="logo admin-logo"><a href="index.html">CS4GATE</a></div>
+      <span class="admin-topbar-title">Admin Dashboard</span>
+    </div>
+    <div class="admin-topbar-actions">
+      <a class="btn btn-outline admin-topbar-button" href="free.html" title="Open Free Dashboard"><i class="fas fa-unlock"></i> Free Dashboard</a>
+      <a class="btn btn-outline admin-topbar-button" href="paid-dashboard.html" title="Open Paid Dashboard"><i class="fas fa-crown"></i> Paid Dashboard</a>
+      <button class="admin-icon-btn" id="adminThemeToggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <button class="btn btn-outline admin-topbar-button" id="adminRefresh"><i class="fas fa-rotate"></i> Refresh</button>
+      <button class="btn btn-primary admin-topbar-button" id="adminLogout"><i class="fas fa-right-from-bracket"></i> Logout</button>
+      <button class="admin-icon-btn admin-tools-toggle" id="adminToolsToggle" aria-label="Open quick actions"><i class="fas fa-sliders-h"></i></button>
+    </div>
+  </header>
+
+  <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin sections">
+    <div class="admin-profile">
+      <i class="fas fa-user-shield"></i>
+      <div>
+        <strong id="adminName">Admin</strong>
+        <span id="adminEmail">Verified access</span>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <button class="admin-nav-item active" data-admin-section="overview"><i class="fas fa-gauge-high"></i><span>Overview</span></button>
+      <button class="admin-nav-item" data-admin-section="questions"><i class="fas fa-pen-to-square"></i><span>Questions</span></button>
+      <button class="admin-nav-item" data-admin-section="import"><i class="fas fa-file-import"></i><span>Bulk Import</span></button>
+      <button class="admin-nav-item" data-admin-section="taxonomy"><i class="fas fa-sitemap"></i><span>Courses & Topics</span></button>
+      <button class="admin-nav-item" data-admin-section="users"><i class="fas fa-users-gear"></i><span>Users</span></button>
+      <button class="admin-nav-item" data-admin-section="moderation"><i class="fas fa-shield-halved"></i><span>Moderation</span></button>
+      <button class="admin-nav-item" data-admin-section="media"><i class="fas fa-image"></i><span>Media</span></button>
+      <button class="admin-nav-item" data-admin-section="publish"><i class="fas fa-cloud-arrow-up"></i><span>SEO & Publish</span></button>
+      <button class="admin-nav-item" data-admin-section="design"><i class="fas fa-palette"></i><span>Design System</span></button>
+      <button class="admin-nav-item" data-admin-section="security"><i class="fas fa-lock"></i><span>Security</span></button>
+    </nav>
+  </aside>
+
+  <div class="admin-overlay" id="adminOverlay"></div>
+  <aside class="right-panel admin-right-panel" id="adminRightPanel" aria-label="Admin quick actions">
+    <div class="panel-header">
+      <span>Quick Actions</span>
+      <i class="fas fa-times close-panel" id="adminRightClose" aria-label="Close quick actions"></i>
+    </div>
+    <a class="panel-item" href="free.html"><span><i class="fas fa-unlock"></i> &nbsp;Free Dashboard</span></a>
+    <a class="panel-item" href="paid-dashboard.html"><span><i class="fas fa-crown"></i> &nbsp;Paid Dashboard</span></a>
+    <button class="panel-item theme-toggle admin-right-action-btn" id="adminThemeTogglePanel" type="button"><span><i class="fas fa-moon"></i> &nbsp;Dark Mode</span><div class="switch"></div></button>
+    <button class="panel-item admin-right-action-btn" id="adminRefreshPanel" type="button"><span><i class="fas fa-rotate"></i> &nbsp;Refresh</span></button>
+    <button class="panel-item admin-right-action-btn" id="adminLogoutPanel" type="button"><span><i class="fas fa-right-from-bracket"></i> &nbsp;Logout</span></button>
+  </aside>
+
+  <main class="admin-main">
+    <section class="admin-page-head">
+      <div>
+        <span class="eyebrow">Control panel</span>
+        <h1>Manage CS4GATE without code edits</h1>
+        <p>Use this panel to update question data, users, public pages, media, moderation, and publishing tools from desktop or mobile.</p>
+      </div>
+      <div class="admin-status-pill" id="adminApiStatus"><i class="fas fa-circle-notch fa-spin"></i> Loading</div>
+    </section>
+
+    <section class="admin-section active" id="admin-section-overview">
+      <div class="admin-section-title">
+        <div>
+          <h2>Admin Home</h2>
+          <p>Website status and items that need attention.</p>
+        </div>
+      </div>
+      <div class="admin-metric-grid" id="adminMetrics"></div>
+      <div class="admin-two-col">
+        <article class="content-card admin-card-flat">
+          <h3>Question coverage</h3>
+          <div id="adminCourseSummary" class="admin-list-compact"></div>
+        </article>
+        <article class="content-card admin-card-flat">
+          <h3>Next useful actions</h3>
+          <div class="admin-action-list">
+            <button class="btn btn-primary" data-admin-jump="questions"><i class="fas fa-plus"></i> Add or edit question</button>
+            <button class="btn btn-outline" data-admin-jump="import"><i class="fas fa-file-import"></i> Bulk import JSON</button>
+            <button class="btn btn-outline" data-admin-jump="moderation"><i class="fas fa-comments"></i> Review messages</button>
+            <button class="btn btn-outline" data-admin-jump="publish"><i class="fas fa-cloud-arrow-up"></i> Regenerate public pages</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-questions">
+      <div class="admin-section-title">
+        <div>
+          <h2>Question Manager</h2>
+          <p>Add, edit, delete, preview, and publish questions from one place.</p>
+        </div>
+        <button class="btn btn-primary" id="newQuestionBtn"><i class="fas fa-plus"></i> New Question</button>
+      </div>
+
+      <form class="content-card admin-editor admin-question-editor-card" id="questionForm">
+        <div class="admin-form-head">
+          <div>
+            <h3 id="questionEditorTitle">Question Editor</h3>
+            <p>HTML, MathJax equations, tables, code, and images under <code>uploads/questions/</code> are supported.</p>
+            <p class="admin-shortcut-hint"><i class="fas fa-keyboard"></i> Shortcuts: <kbd>Ctrl/Cmd + S</kbd> save, <kbd>Ctrl/Cmd + Shift + P</kbd> preview.</p>
+          </div>
+        </div>
+        <div class="admin-wp-layout">
+          <div class="admin-wp-main">
+            <div class="admin-wp-toolbar" role="toolbar" aria-label="Editor formatting">
+              <button type="button" class="admin-editor-tool-btn" data-editor-insert-tag="h3" title="Insert heading"><i class="fas fa-heading"></i> Heading</button>
+              <button type="button" class="admin-editor-tool-btn" data-editor-insert-tag="ul" title="Insert list"><i class="fas fa-list-ul"></i> List</button>
+              <button type="button" class="admin-editor-tool-btn" data-editor-insert-tag="table" title="Insert table"><i class="fas fa-table"></i> Table</button>
+              <button type="button" class="admin-editor-tool-btn" data-editor-insert-tag="math" title="Insert MathJax"><i class="fas fa-superscript"></i> Math</button>
+              <button type="button" class="admin-editor-tool-btn" data-editor-insert-tag="code" title="Insert code block"><i class="fas fa-code"></i> Code</button>
+              <button type="button" class="admin-editor-tool-btn" data-editor-insert-tag="figure" title="Insert image figure"><i class="fas fa-image"></i> Figure</button>
+            </div>
+
+            <div class="admin-editor-tabs" role="tablist" aria-label="Question content editors">
+              <button type="button" class="admin-editor-tab is-active" data-editor-tab="question" data-editor-target="qQuestion">Question</button>
+              <button type="button" class="admin-editor-tab" data-editor-tab="theory" data-editor-target="qTheory">Theory</button>
+              <button type="button" class="admin-editor-tab" data-editor-tab="solution" data-editor-target="qSolution">Solution</button>
+            </div>
+
+            <div class="admin-editor-panes">
+              <label class="admin-wide-label admin-editor-pane is-active" data-editor-pane="question">Question HTML<textarea id="qQuestion" rows="11" required></textarea></label>
+              <label class="admin-wide-label admin-editor-pane" data-editor-pane="theory">Theory HTML<textarea id="qTheory" rows="11" required></textarea></label>
+              <label class="admin-wide-label admin-editor-pane" data-editor-pane="solution">Solution HTML<textarea id="qSolution" rows="11" required></textarea></label>
+            </div>
+
+            <div class="admin-form-actions admin-form-actions-bottom">
+              <button type="button" class="btn btn-outline" id="previewQuestionBtn"><i class="fas fa-eye"></i> Preview</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-floppy-disk"></i> Save & Publish</button>
+              <button type="button" class="comment-delete" id="deleteQuestionBtn"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+            <div id="questionSaveResult" class="auth-message info"></div>
+            <div class="admin-preview" id="questionPreview" hidden></div>
+          </div>
+
+          <aside class="admin-wp-side" aria-label="Question settings panel">
+            <section class="admin-tool-card admin-wp-panel">
+              <div>
+                <strong>Question Settings</strong>
+                <span>Post-style metadata and classification for this question.</span>
+              </div>
+              <div class="admin-form-grid admin-form-grid-2">
+                <label>ID<input id="qId" name="id" type="number" min="1" required></label>
+                <label>Course<select id="qCourse" name="course" required></select></label>
+                <label>Chapter<input id="qChapter" name="chapter" required></label>
+                <label>Topic<input id="qTopic" name="topic" required></label>
+                <label>Section<select id="qSection" name="section" required><option>All Question</option><option>PYQ</option></select></label>
+                <label>Year<input id="qYear" name="year" required></label>
+                <label>Type<select id="qType" name="type" required><option>MCQ</option><option>MSQ</option><option>NAT</option></select></label>
+                <label>Difficulty<select id="qDifficulty" name="difficulty"><option value="">None</option><option>Easy</option><option>Medium</option><option>Hard</option></select></label>
+              </div>
+            </section>
+
+            <section class="admin-tool-card admin-wp-panel">
+              <div>
+                <strong>Answer Data</strong>
+                <span>Structured answer and options for objective question types.</span>
+              </div>
+              <label class="admin-wide-label">Options JSON <span>Use array for MCQ/MSQ, leave empty for NAT.</span><textarea id="qOptions" rows="6" placeholder='["Option A","Option B","Option C","Option D"]'></textarea></label>
+              <label class="admin-wide-label">Answer <span>Use normal text or JSON array for MSQ.</span><textarea id="qAnswer" rows="4" required></textarea></label>
+            </section>
+
+            <section class="admin-tool-card admin-wp-panel">
+              <div>
+                <strong>Image snippet</strong>
+                <span>Paste an uploaded path and insert image HTML into any section.</span>
+              </div>
+              <div class="admin-snippet-grid">
+                <input id="imageSnippetPath" type="text" placeholder="uploads/questions/cache-diagram-1.png">
+                <input id="imageSnippetAlt" type="text" placeholder="Alt text">
+                <button type="button" class="btn btn-outline admin-small-btn" data-image-target="qQuestion">Question</button>
+                <button type="button" class="btn btn-outline admin-small-btn" data-image-target="qTheory">Theory</button>
+                <button type="button" class="btn btn-outline admin-small-btn" data-image-target="qSolution">Solution</button>
+              </div>
+            </section>
+
+            <section class="admin-tool-card admin-wp-panel">
+              <div>
+                <strong>Draft & checks</strong>
+                <span id="questionDraftStatus">Draft autosave is ready.</span>
+              </div>
+              <div class="admin-draft-actions">
+                <button type="button" class="btn btn-outline admin-small-btn" id="restoreDraftBtn">Restore Draft</button>
+                <button type="button" class="btn btn-outline admin-small-btn" id="clearDraftBtn">Clear Draft</button>
+              </div>
+              <div class="admin-check-panel" id="questionEditorChecks"></div>
+            </section>
+          </aside>
+        </div>
+      </form>
+
+      <div class="content-card admin-card-flat admin-question-list-card">
+        <div class="admin-question-list-head">
+          <div>
+            <h3>All Questions</h3>
+            <p>Search existing questions, then edit any row above in the editor.</p>
+          </div>
+          <span class="admin-list-hint"><i class="fas fa-table-list"></i> Latest 120 results</span>
+        </div>
+        <div class="admin-filter-grid admin-question-filters">
+          <label>Search<input id="questionSearch" type="search" placeholder="ID, topic, year, or question text"></label>
+          <label>Course<select id="questionCourseFilter"><option value="">All courses</option></select></label>
+          <label>Year<select id="questionYearFilter"><option value="">All years</option></select></label>
+          <label>Type<select id="questionTypeFilter"><option value="">All types</option><option>MCQ</option><option>MSQ</option><option>NAT</option></select></label>
+          <button class="btn btn-primary" id="loadQuestionsBtn"><i class="fas fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table admin-question-table">
+            <thead><tr><th>ID</th><th>Course</th><th>Topic</th><th>Type</th><th>Updated</th><th>Action</th></tr></thead>
+            <tbody id="questionRows"><tr><td colspan="6">Loading questions...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-import">
+      <div class="admin-section-title">
+        <div>
+          <h2>Bulk Import</h2>
+          <p>Paste an array of question objects. Import validates, sanitizes, saves to MySQL, and regenerates public pages.</p>
+        </div>
+      </div>
+      <section class="content-card admin-card-flat">
+        <textarea id="jsonInput" class="admin-json" rows="14" placeholder='[{"id":999,"course":"DBMS","chapter":"SQL","topic":"Joins","section":"All Question","year":"2026","type":"MCQ","question":"...","options":["A","B"],"answer":"A","theory":"...","solution":"...","difficulty":"Medium"}]'></textarea>
+        <div class="assessment-actions">
+          <button class="btn btn-primary" id="importBtn"><i class="fas fa-file-import"></i> Validate & Import</button>
+          <button class="btn btn-outline" id="clearImported"><i class="fas fa-broom"></i> Clear Local Cache</button>
+        </div>
+        <div id="importResult" class="auth-message info"></div>
+      </section>
+    </section>
+
+    <section class="admin-section" id="admin-section-taxonomy">
+      <div class="admin-section-title">
+        <div>
+          <h2>Courses & Topics</h2>
+          <p>Review course, chapter, topic, section, year, and type coverage before publishing.</p>
+        </div>
+      </div>
+      <div class="content-card admin-card-flat">
+        <div id="taxonomySummary" class="admin-taxonomy"></div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-users">
+      <div class="admin-section-title">
+        <div>
+          <h2>User Manager</h2>
+          <p>Manage user role and subscription state. Admin changes are checked server-side.</p>
+        </div>
+      </div>
+      <div class="content-card admin-card-flat">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Plan</th><th>Target</th><th>Verified</th><th>Action</th></tr></thead>
+            <tbody id="userRows"><tr><td colspan="7">Loading users...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-moderation">
+      <div class="admin-section-title">
+        <div>
+          <h2>Moderation</h2>
+          <p>Approve, reject, archive, or delete public question discussions and contact messages.</p>
+        </div>
+      </div>
+      <div class="moderation-grid">
+        <div class="content-card admin-card-flat">
+          <h3>Question comments</h3>
+          <div id="moderationComments" class="moderation-list"></div>
+        </div>
+        <div class="content-card admin-card-flat">
+          <h3>Contact messages</h3>
+          <div id="moderationMessages" class="moderation-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-media">
+      <div class="admin-section-title">
+        <div>
+          <h2>Media Manager</h2>
+          <p>Upload safe question images and copy their paths for question, theory, or solution HTML.</p>
+        </div>
+      </div>
+      <div class="content-card admin-card-flat">
+        <form class="admin-upload" id="mediaUploadForm">
+          <input type="file" id="mediaFile" name="image" accept="image/png,image/jpeg,image/webp" required>
+          <button class="btn btn-primary" type="submit"><i class="fas fa-upload"></i> Upload Image</button>
+        </form>
+        <div id="mediaResult" class="auth-message info"></div>
+        <div id="mediaList" class="admin-media-grid"></div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-publish">
+      <div class="admin-section-title">
+        <div>
+          <h2>SEO & Publish</h2>
+          <p>Regenerate public question pages, course pages, sitemap, and compact question data after content changes.</p>
+        </div>
+      </div>
+      <div class="admin-two-col">
+        <article class="content-card admin-card-flat">
+          <h3>Public regeneration</h3>
+          <p>Use this after large imports or manual edits if you want to force a refresh.</p>
+          <button class="btn btn-primary" id="publishBtn"><i class="fas fa-cloud-arrow-up"></i> Regenerate Public Pages</button>
+          <div id="publishResult" class="auth-message info"></div>
+        </article>
+        <article class="content-card admin-card-flat">
+          <h3>SEO checks included</h3>
+          <ul class="admin-check-list">
+            <li>Dynamic question titles and meta descriptions</li>
+            <li>Canonical public URLs</li>
+            <li>Sitemap regenerated from public pages only</li>
+            <li>Private/admin pages remain noindex</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-section" id="admin-section-design">
+      <div class="admin-section-title">
+        <div>
+          <h2>Design System</h2>
+          <p>Control global fonts, card styling, and light/dark color tokens for cards, thumbnails, and UI surfaces.</p>
+        </div>
+      </div>
+      <form class="content-card admin-card-flat admin-design-card" id="designSettingsForm">
+        <h3>Advanced Theme Studio</h3>
+        <div class="admin-design-studio">
+          <p>Use presets and generators for faster premium styling across light and dark themes.</p>
+          <div class="admin-design-preset-grid" id="designPresetGrid">
+            <button type="button" class="btn btn-outline admin-design-preset-btn" data-design-preset="royal"><i class="fas fa-gem"></i> Royal</button>
+            <button type="button" class="btn btn-outline admin-design-preset-btn" data-design-preset="ocean"><i class="fas fa-water"></i> Ocean</button>
+            <button type="button" class="btn btn-outline admin-design-preset-btn" data-design-preset="emerald"><i class="fas fa-leaf"></i> Emerald</button>
+            <button type="button" class="btn btn-outline admin-design-preset-btn" data-design-preset="sunset"><i class="fas fa-sun"></i> Sunset</button>
+            <button type="button" class="btn btn-outline admin-design-preset-btn" data-design-preset="slate"><i class="fas fa-mountain"></i> Slate</button>
+          </div>
+          <div class="admin-design-quick-grid">
+            <label>Apply target
+              <select id="designPresetScope">
+                <option value="both">Both themes</option>
+                <option value="light">Light only</option>
+                <option value="dark">Dark only</option>
+              </select>
+            </label>
+            <button type="button" class="btn btn-outline" id="designAutoPaletteBtn"><i class="fas fa-wand-magic-sparkles"></i> Auto-generate from Primary + Accent</button>
+            <button type="button" class="btn btn-outline" id="designSwapThemeBtn"><i class="fas fa-right-left"></i> Swap Light & Dark</button>
+            <button type="button" class="btn btn-outline" id="designCopyJsonBtn"><i class="fas fa-copy"></i> Copy Theme JSON</button>
+            <button type="button" class="btn btn-outline" id="designApplyJsonBtn"><i class="fas fa-file-import"></i> Apply JSON</button>
+          </div>
+          <div class="admin-design-route-grid">
+            <label>Public pages preset
+              <select id="dsPagePresetPublic">
+                <option value="inherit">Inherit current palette</option>
+                <option value="royal">Royal</option>
+                <option value="ocean">Ocean</option>
+                <option value="emerald">Emerald</option>
+                <option value="sunset">Sunset</option>
+                <option value="slate">Slate</option>
+              </select>
+            </label>
+            <label>Free dashboard preset
+              <select id="dsPagePresetFree">
+                <option value="inherit">Inherit current palette</option>
+                <option value="royal">Royal</option>
+                <option value="ocean">Ocean</option>
+                <option value="emerald">Emerald</option>
+                <option value="sunset">Sunset</option>
+                <option value="slate">Slate</option>
+              </select>
+            </label>
+            <label>Paid dashboard preset
+              <select id="dsPagePresetPaid">
+                <option value="inherit">Inherit current palette</option>
+                <option value="royal">Royal</option>
+                <option value="ocean">Ocean</option>
+                <option value="emerald">Emerald</option>
+                <option value="sunset">Sunset</option>
+                <option value="slate">Slate</option>
+              </select>
+            </label>
+          </div>
+          <p class="admin-design-route-note">Per-page-group presets can differ: public, free dashboard, and paid dashboard pages can each use a separate preset.</p>
+          <div class="admin-design-route-status" id="designRouteStatus" aria-live="polite">
+            <span class="admin-route-chip" data-route-chip="public"><i class="fas fa-globe"></i><span class="admin-route-chip-text">Public: Inherit</span></span>
+            <span class="admin-route-chip" data-route-chip="free"><i class="fas fa-unlock"></i><span class="admin-route-chip-text">Free: Inherit</span></span>
+            <span class="admin-route-chip" data-route-chip="paid"><i class="fas fa-crown"></i><span class="admin-route-chip-text">Paid: Inherit</span></span>
+          </div>
+          <p class="admin-design-route-note">Preset routing now also controls public mobile drawer/sidebar surfaces and menu rows for each page group.</p>
+          <label class="admin-wide-label">Theme JSON
+            <span>Paste exported design JSON here, then click Apply JSON.</span>
+            <textarea id="designJsonInput" rows="6" placeholder='{"global":{},"light":{},"dark":{}}'></textarea>
+          </label>
+          <div class="admin-theme-mini-preview">
+            <article class="admin-theme-preview-card">
+              <span class="preview-label">Preview Card</span>
+              <h4>CS4GATE Theme</h4>
+              <p>Live token preview for border, background, and text contrast.</p>
+              <button type="button" class="btn btn-primary">Primary Action</button>
+            </article>
+            <article class="admin-theme-preview-card">
+              <span class="preview-label">Thumbnail Style</span>
+              <div class="mini-thumb">
+                <strong>Data Structures</strong>
+                <small>Trees / Hashing</small>
+                <em>CS4GATE</em>
+              </div>
+            </article>
+          </div>
+          <div id="designStudioResult" class="auth-message info">Preset and generator tools are ready.</div>
+        </div>
+
+        <h3>Global Tokens</h3>
+        <div class="admin-form-grid">
+          <label>Body font<input id="dsFontBody" type="text" placeholder='"Inter", "Segoe UI", system-ui, sans-serif'></label>
+          <label>Heading font<input id="dsFontHeading" type="text" placeholder='"Sora", "Inter", system-ui, sans-serif'></label>
+          <label>Thumbnail brand text<input id="dsThumbBrandText" type="text" maxlength="30" placeholder="CS4GATE"></label>
+          <label>Card radius (px)<input id="dsCardRadiusPx" type="number" min="4" max="24" step="1"></label>
+          <label>Card shadow<input id="dsCardShadow" type="text"></label>
+          <label>Card shadow hover<input id="dsCardShadowHover" type="text"></label>
+          <label>Dashboard thumb height<input id="dsThumbDashboardHeight" type="number" min="88" max="180" step="1"></label>
+          <label>Question thumb height<input id="dsThumbCourseQuestionHeight" type="number" min="96" max="220" step="1"></label>
+          <label>Subject thumb height<input id="dsThumbSubjectHeight" type="number" min="104" max="240" step="1"></label>
+          <label>Chapter thumb height<input id="dsThumbChapterHeight" type="number" min="104" max="240" step="1"></label>
+        </div>
+
+        <h3>Light Theme Palette</h3>
+        <div class="admin-form-grid admin-color-grid">
+          <label>Primary<input id="dsLightPrimary" type="color"></label>
+          <label>Accent<input id="dsLightAccent" type="color"></label>
+          <label>Navbar<input id="dsLightNav" type="color"></label>
+          <label>Navbar secondary<input id="dsLightNav2" type="color"></label>
+          <label>Page background<input id="dsLightBg" type="color"></label>
+          <label>Card background<input id="dsLightBgElev" type="color"></label>
+          <label>Soft background<input id="dsLightBgSoft" type="color"></label>
+          <label>Text<input id="dsLightText" type="color"></label>
+          <label>Muted text<input id="dsLightTextMuted" type="color"></label>
+          <label>Border<input id="dsLightBorder" type="color"></label>
+          <label>Primary button<input id="dsLightButtonPrimaryBg" type="color"></label>
+          <label>Primary button text<input id="dsLightButtonPrimaryText" type="color"></label>
+          <label>Thumb start<input id="dsLightThumbBaseStart" type="color"></label>
+          <label>Thumb middle<input id="dsLightThumbBaseMid" type="color"></label>
+          <label>Thumb end<input id="dsLightThumbBaseEnd" type="color"></label>
+          <label>Thumb glow<input id="dsLightThumbGlow" type="color"></label>
+          <label>Thumb corner glow<input id="dsLightThumbCorner" type="color"></label>
+          <label>Thumb label<input id="dsLightThumbLabel" type="color"></label>
+          <label>Thumb title<input id="dsLightThumbTitle" type="color"></label>
+          <label>Thumb subtitle<input id="dsLightThumbSubtitle" type="color"></label>
+          <label>Thumb brand<input id="dsLightThumbBrand" type="color"></label>
+          <label>Thumb border<input id="dsLightThumbBorder" type="color"></label>
+          <label>Shortcut start<input id="dsLightShortcutBaseStart" type="color"></label>
+          <label>Shortcut middle<input id="dsLightShortcutBaseMid" type="color"></label>
+          <label>Shortcut end<input id="dsLightShortcutBaseEnd" type="color"></label>
+          <label>Shortcut glow<input id="dsLightShortcutGlow" type="color"></label>
+          <label>Shortcut corner glow<input id="dsLightShortcutCorner" type="color"></label>
+          <label>Shortcut label<input id="dsLightShortcutLabel" type="color"></label>
+          <label>Shortcut title<input id="dsLightShortcutTitle" type="color"></label>
+          <label>Shortcut subtitle<input id="dsLightShortcutSubtitle" type="color"></label>
+          <label>Shortcut brand<input id="dsLightShortcutBrand" type="color"></label>
+          <label>Shortcut border<input id="dsLightShortcutBorder" type="color"></label>
+        </div>
+
+        <h3>Dark Theme Palette</h3>
+        <div class="admin-form-grid admin-color-grid">
+          <label>Primary<input id="dsDarkPrimary" type="color"></label>
+          <label>Accent<input id="dsDarkAccent" type="color"></label>
+          <label>Navbar<input id="dsDarkNav" type="color"></label>
+          <label>Navbar secondary<input id="dsDarkNav2" type="color"></label>
+          <label>Page background<input id="dsDarkBg" type="color"></label>
+          <label>Card background<input id="dsDarkBgElev" type="color"></label>
+          <label>Soft background<input id="dsDarkBgSoft" type="color"></label>
+          <label>Text<input id="dsDarkText" type="color"></label>
+          <label>Muted text<input id="dsDarkTextMuted" type="color"></label>
+          <label>Border<input id="dsDarkBorder" type="color"></label>
+          <label>Primary button<input id="dsDarkButtonPrimaryBg" type="color"></label>
+          <label>Primary button text<input id="dsDarkButtonPrimaryText" type="color"></label>
+          <label>Thumb start<input id="dsDarkThumbBaseStart" type="color"></label>
+          <label>Thumb middle<input id="dsDarkThumbBaseMid" type="color"></label>
+          <label>Thumb end<input id="dsDarkThumbBaseEnd" type="color"></label>
+          <label>Thumb glow<input id="dsDarkThumbGlow" type="color"></label>
+          <label>Thumb corner glow<input id="dsDarkThumbCorner" type="color"></label>
+          <label>Thumb label<input id="dsDarkThumbLabel" type="color"></label>
+          <label>Thumb title<input id="dsDarkThumbTitle" type="color"></label>
+          <label>Thumb subtitle<input id="dsDarkThumbSubtitle" type="color"></label>
+          <label>Thumb brand<input id="dsDarkThumbBrand" type="color"></label>
+          <label>Thumb border<input id="dsDarkThumbBorder" type="color"></label>
+          <label>Shortcut start<input id="dsDarkShortcutBaseStart" type="color"></label>
+          <label>Shortcut middle<input id="dsDarkShortcutBaseMid" type="color"></label>
+          <label>Shortcut end<input id="dsDarkShortcutBaseEnd" type="color"></label>
+          <label>Shortcut glow<input id="dsDarkShortcutGlow" type="color"></label>
+          <label>Shortcut corner glow<input id="dsDarkShortcutCorner" type="color"></label>
+          <label>Shortcut label<input id="dsDarkShortcutLabel" type="color"></label>
+          <label>Shortcut title<input id="dsDarkShortcutTitle" type="color"></label>
+          <label>Shortcut subtitle<input id="dsDarkShortcutSubtitle" type="color"></label>
+          <label>Shortcut brand<input id="dsDarkShortcutBrand" type="color"></label>
+          <label>Shortcut border<input id="dsDarkShortcutBorder" type="color"></label>
+        </div>
+
+        <div class="admin-form-actions admin-form-actions-bottom">
+          <button type="button" class="btn btn-outline" id="designPreviewBtn"><i class="fas fa-eye"></i> Preview in Browser</button>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-floppy-disk"></i> Save Design Settings</button>
+          <button type="button" class="comment-delete" id="designResetBtn"><i class="fas fa-rotate-left"></i> Reset Defaults</button>
+        </div>
+        <div id="designSettingsResult" class="auth-message info"></div>
+      </form>
+    </section>
+
+    <section class="admin-section" id="admin-section-security">
+      <div class="admin-section-title">
+        <div>
+          <h2>Security</h2>
+          <p>Admin features are protected by backend role checks. Keep passwords private and rotate them after setup work.</p>
+        </div>
+      </div>
+      <div class="admin-metric-grid">
+        <article class="admin-metric-card"><i class="fas fa-user-shield"></i><strong>Admin only</strong><span>Every admin API checks the session role on the server.</span></article>
+        <article class="admin-metric-card"><i class="fas fa-code"></i><strong>Sanitized HTML</strong><span>Question imports remove scripts, events, unsafe links, and unsafe image paths.</span></article>
+        <article class="admin-metric-card"><i class="fas fa-file-image"></i><strong>Restricted uploads</strong><span>Only small PNG, JPG, and WEBP files are accepted.</span></article>
+        <article class="admin-metric-card"><i class="fas fa-database"></i><strong>Prepared SQL</strong><span>Admin updates use whitelisted tables and prepared statements.</span></article>
+      </div>
+    </section>
+  </main>
+
+  <script src="admin.js?v=20260531contrast1"></script>
+</body>
+</html>
+
+
+
+

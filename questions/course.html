@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="../static-data.js"></script><script src="../static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Course Questions | CS4GATE</title>
+  <meta name="description" content="Browse course-wise GATE CS questions chapter by chapter with answers and solutions.">
+  <meta name="robots" content="index, follow">
+  <link id="courseCanonical" rel="canonical" href="https://cs4gate.com/questions/course.html">
+  <meta property="og:title" content="Course Questions | CS4GATE">
+  <meta property="og:description" content="Browse course-wise GATE CS questions chapter by chapter with answers and solutions.">
+  <meta property="og:type" content="article">
+  <meta id="courseOgUrl" property="og:url" content="https://cs4gate.com/questions/course.html">
+  <meta name="twitter:card" content="summary">
+  <meta id="courseTwitterTitle" name="twitter:title" content="Course Questions | CS4GATE">
+  <meta id="courseTwitterDescription" name="twitter:description" content="Browse course-wise GATE CS questions chapter by chapter with answers and solutions.">
+  <meta id="courseTwitterUrl" name="twitter:url" content="https://cs4gate.com/questions/course.html">
+  <script id="courseJsonLd" type="application/ld+json">{"@context":"https://schema.org","@graph":[]}</script>
+  <link rel="stylesheet" href="../style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="landing-nav portal-nav">
+    <a class="auth-logo" href="../index.html">CS4GATE</a>
+    <nav aria-label="Primary navigation">
+      <div class="course-menu">
+        <button type="button" class="course-menu-btn">Courses <i class="fas fa-chevron-down"></i></button>
+        <div id="courseMenuPanel" class="course-menu-panel">
+          <a href="index.html">All Questions</a>
+        </div>
+      </div>
+      <a href="index.html">Practice</a>
+      <a href="../signin.html?redirect=quiz.html">Quiz</a>
+      <a href="../signin.html?redirect=mock-test.html">Mock Test</a>
+      <a href="../about.html">About</a>
+      <a href="../paid.html">Pricing</a>
+      <button class="landing-theme-toggle" type="button" data-landing-theme-toggle aria-label="Switch theme">
+        <i class="fas fa-moon"></i><span>Dark</span>
+      </button>
+      <a class="btn btn-outline" href="../signin.html">Sign In</a>
+    </nav>
+  </header>
+
+  <main class="landing-page course-question-page">
+    <nav class="seo-breadcrumb" id="courseBreadcrumb" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span>/</span><a href="index.html">Questions</a><span>/</span><span aria-current="page">Course</span>
+    </nav>
+    <section class="content-hero">
+      <span class="eyebrow">Course question bank</span>
+      <h1 id="courseTitle">Loading questions...</h1>
+      <p id="courseIntro">Questions are grouped chapter by chapter for focused practice.</p>
+    </section>
+    <section class="content-card">
+      <div class="nav-search">
+        <input id="searchInput" type="text" placeholder="Search questions, topic, chapter..." autocomplete="off">
+      </div>
+      <div id="searchResults"></div>
+    </section>
+    <nav class="course-strip" id="courseLinks" aria-label="Course shortcuts"></nav>
+    <section class="content-card" id="courseSummaryCard" hidden></section>
+    <section class="portal-ad-grid course-ad-strip" aria-label="Sponsored resources">
+      <div class="ad-slot wide">
+        <span>Advertisement</span>
+        <strong>GATE CS Mock Test Series (2026)</strong>
+        <p>120 full-length mocks, all-India rank, and detailed analytics for exam-style practice.</p>
+        <a class="btn btn-primary slot-cta" href="../signin.html?redirect=mock-test.html">Start Free Mock</a>
+      </div>
+      <div class="ad-slot wide">
+        <span>Ad Slot</span>
+        <strong>Google AdSense Ready</strong>
+        <p>This slot is reserved for Google ads. Keep network content here after AdSense setup.</p>
+      </div>
+    </section>
+    <section id="courseQuestionRoot" class="course-question-root">
+      <div class="empty compact">
+        <h3>Loading course questions</h3>
+        <p>Please wait while the question bank is prepared.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <a href="../index.html">Home</a>
+    <a href="index.html">All Questions</a>
+    <a href="../about.html">About Us</a>
+    <a href="../privacy.html">Privacy Policy</a>
+    <span>Copyright 2026 CS4GATE</span>
+  </footer>
+
+  <script src="../questionsData.js?v=20260520resilient"></script>
+  <script src="../thumb-placeholders.js?v=20260531group2"></script>
+  <script src="../search.js?v=20260520resilient"></script> <script src="../static-question-pages.js"></script>
+  <script src="../landing-theme.js?v=20260531contrast1"></script>
+  <script>
+    (async function () {
+      "use strict";
+
+      const siteUrl = "https://cs4gate.com";
+      const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[ch]);
+
+      function slugify(value) {
+        return String(value ?? "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .slice(0, 80);
+      }
+
+      function plainText(html) {
+        const holder = document.createElement("div");
+        holder.innerHTML = String(html ?? "");
+        return (holder.textContent || holder.innerText || "").replace(/\s+/g, " ").trim();
+      }
+
+      function questionPath(question) {
+        const source = question.topic || plainText(question.question) || "question";
+        return `${question.id}-${slugify(source)}.html`;
+      }
+
+      function renderThumbPlaceholder(options = {}) {
+        if (window.SOA_THUMB && typeof window.SOA_THUMB.render === "function") {
+          return window.SOA_THUMB.render(options);
+        }
+        const label = esc((options.label || options.subject || "GATE Computer Science").toUpperCase());
+        const title = esc(options.title || options.chapter || options.subject || "Practice");
+        const subtitle = esc(options.subtitle || options.topic || "");
+        return `
+          <div class="cs4-thumb cs4-thumb--${esc(options.variant || "course-question")}" aria-hidden="true">
+            <span class="cs4-thumb-label">${label}</span>
+            <strong class="cs4-thumb-title">${title}</strong>
+            ${subtitle ? `<span class="cs4-thumb-subtitle">${subtitle}</span>` : ""}
+            <span class="cs4-thumb-brand">CS4GATE</span>
+          </div>
+        `;
+      }
+
+      function toCanonicalCourse(questionCourse) {
+        return String(questionCourse || "").trim();
+      }
+
+      async function loadCourseCatalog() {
+        try {
+          const res = await fetch("../api/questions.php?meta=courses", { cache: "no-store" });
+          const payload = await res.json();
+          if (res.ok && Array.isArray(payload.courses)) {
+            return payload.courses
+              .filter((row) => row && row.enabled !== false)
+              .map((row) => ({
+                name: String(row.name || "").trim(),
+                slug: String(row.slug || "").trim(),
+                category: String(row.category || "Core CS").trim()
+              }))
+              .filter((row) => row.name && row.slug);
+          }
+        } catch {}
+
+        if (Array.isArray(window.questionsData)) {
+          const seen = new Set();
+          const fallback = [];
+          window.questionsData.forEach((q) => {
+            const name = toCanonicalCourse(q.course);
+            const slug = slugify(name);
+            if (!name || !slug || seen.has(slug)) return;
+            seen.add(slug);
+            fallback.push({ name, slug, category: "Core CS" });
+          });
+          fallback.sort((a, b) => a.name.localeCompare(b.name));
+          return fallback;
+        }
+        return [];
+      }
+
+      function setDynamicMeta(courseName, stats) {
+        const courseSlug = slugify(courseName);
+        const canonicalPath = courseSlug ? `/questions/course.html?course=${encodeURIComponent(courseSlug)}` : "/questions/course.html";
+        const canonicalUrl = `${siteUrl}${canonicalPath}`;
+        const title = courseName ? `GATE CS ${courseName} Questions | CS4GATE` : "Course Questions | CS4GATE";
+        const summary = stats
+          ? `${stats.questionCount} questions across ${stats.chapterCount} chapters and ${stats.topicCount} topics`
+          : "questions grouped chapter by chapter";
+        const description = courseName
+          ? `Practice ${courseName} GATE CS questions with answers and solutions. Browse ${summary} for focused subject-wise revision.`
+          : "Browse course-wise GATE CS questions chapter by chapter with answers and solutions.";
+
+        document.title = title;
+        document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+        document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
+        document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+        document.getElementById("courseOgUrl")?.setAttribute("content", canonicalUrl);
+        document.getElementById("courseCanonical")?.setAttribute("href", canonicalUrl);
+        document.getElementById("courseTwitterTitle")?.setAttribute("content", title);
+        document.getElementById("courseTwitterDescription")?.setAttribute("content", description);
+        document.getElementById("courseTwitterUrl")?.setAttribute("content", canonicalUrl);
+
+        const graph = [
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
+              { "@type": "ListItem", position: 2, name: "Questions", item: `${siteUrl}/questions/` },
+              { "@type": "ListItem", position: 3, name: courseName || "Course Questions", item: canonicalUrl }
+            ]
+          },
+          {
+            "@type": "CollectionPage",
+            name: title,
+            url: canonicalUrl,
+            description,
+            about: courseName ? ["GATE Computer Science", courseName] : ["GATE Computer Science"]
+          }
+        ];
+        const script = document.getElementById("courseJsonLd");
+        if (script) {
+          script.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": graph });
+        }
+      }
+
+      function renderCourseMenus(courses, selectedSlug) {
+        const panel = document.getElementById("courseMenuPanel");
+        const strip = document.getElementById("courseLinks");
+        if (!panel || !strip) return;
+
+        panel.innerHTML = '<a href="index.html">All Questions</a>' + courses.map((course) => (
+          `<a href="course.html?course=${encodeURIComponent(course.slug)}">${esc(course.name)}</a>`
+        )).join("");
+
+        strip.innerHTML = courses.map((course) => (
+          `<a class="${course.slug === selectedSlug ? "active" : ""}" href="course.html?course=${encodeURIComponent(course.slug)}">${esc(course.name)}</a>`
+        )).join("");
+      }
+
+      function renderCourseSummary(courseName, questions, chapters) {
+        const summary = document.getElementById("courseSummaryCard");
+        if (!summary) return;
+        if (!questions.length) {
+          summary.hidden = true;
+          summary.innerHTML = "";
+          return;
+        }
+
+        const topicCount = new Set(questions.map((q) => q.topic || "General")).size;
+        const summaryThumb = renderThumbPlaceholder({
+          variant: "subject",
+          label: "GATE Computer Science",
+          title: courseName,
+          subtitle: `${Object.keys(chapters).length} chapters`
+        });
+        const chapterLinks = Object.entries(chapters).map(([chapter, chapterQuestions]) => {
+          const topics = new Set(chapterQuestions.map((q) => q.topic || "General")).size;
+          return `<a class="similar-item has-cs4-thumb" href="#${slugify(chapter)}">
+            ${renderThumbPlaceholder({
+              variant: "shortcut",
+              subject: courseName,
+              label: courseName || "CS4GATE",
+              title: chapter,
+              subtitle: `${topics} topics / ${chapterQuestions.length} questions`
+            })}
+            <strong>${esc(chapter)}</strong>
+            <span>${topics} topics / ${chapterQuestions.length} questions</span>
+          </a>`;
+        }).join("");
+
+        const firstQuestion = questions[0] ? questionPath(questions[0]) : "index.html";
+        summary.hidden = false;
+        summary.innerHTML = `
+          <span class="eyebrow">Subject overview</span>
+          ${summaryThumb}
+          <h2>${esc(courseName)} practice map</h2>
+          <p>${questions.length} questions are available across ${Object.keys(chapters).length} chapters and ${topicCount} topics.</p>
+          <div class="card-meta">
+            <span class="q-badge">${questions.length} questions</span>
+            <span class="q-badge">${Object.keys(chapters).length} chapters</span>
+            <span class="q-badge">${topicCount} topics</span>
+          </div>
+          <div class="similar-list">${chapterLinks}</div>
+          <div class="assessment-actions">
+            <a class="btn btn-primary" href="${esc(firstQuestion)}">Open First Question</a>
+            <a class="btn btn-outline" href="../signin.html?redirect=free.html?course=${encodeURIComponent(courseName)}">Practice In Dashboard</a>
+            <a class="btn btn-outline" href="../signin.html?redirect=quiz.html?src=paid&scope=course&course=${encodeURIComponent(courseName)}">Start Subject Quiz</a>
+          </div>
+        `;
+      }
+
+      function renderCourseBody(courseName, allQuestions) {
+        const root = document.getElementById("courseQuestionRoot");
+        if (!root) return;
+
+        const courseQuestions = allQuestions.filter((q) => String(q.course) === courseName);
+        const byChapter = courseQuestions.reduce((map, q) => {
+          const chapter = q.chapter || "Other";
+          if (!map[chapter]) map[chapter] = [];
+          map[chapter].push(q);
+          return map;
+        }, {});
+
+        document.getElementById("courseTitle").textContent = courseName ? `${courseName} Questions` : "Course Questions";
+        document.getElementById("courseIntro").textContent = courseQuestions.length
+          ? `${courseQuestions.length} questions from ${Object.keys(byChapter).length} chapters, arranged chapter by chapter.`
+          : "Questions are grouped chapter by chapter for focused practice.";
+
+        document.getElementById("courseBreadcrumb").innerHTML = `
+          <a href="../index.html">Home</a><span>/</span><a href="index.html">Questions</a><span>/</span>
+          ${courseName ? `<span aria-current="page">${esc(courseName)}</span>` : '<span aria-current="page">Course</span>'}
+        `;
+
+        if (!courseQuestions.length) {
+          setDynamicMeta(courseName, null);
+          renderCourseSummary(courseName, [], {});
+          root.innerHTML = `
+            <div class="empty compact">
+              <h3>No questions found</h3>
+              <p>Choose another course or open the full question library.</p>
+              <a class="btn btn-primary" href="index.html">All Questions</a>
+            </div>
+          `;
+          return;
+        }
+
+        const topicCount = new Set(courseQuestions.map((q) => q.topic || "General")).size;
+        setDynamicMeta(courseName, {
+          questionCount: courseQuestions.length,
+          chapterCount: Object.keys(byChapter).length,
+          topicCount
+        });
+        renderCourseSummary(courseName, courseQuestions, byChapter);
+
+        root.innerHTML = Object.entries(byChapter).map(([chapter, chapterQuestions]) => {
+          const byTopic = chapterQuestions.reduce((map, q) => {
+            const topic = q.topic || "General";
+            if (!map[topic]) map[topic] = [];
+            map[topic].push(q);
+            return map;
+          }, {});
+
+          const topicCountLabel = `${Object.keys(byTopic).length} topics`;
+          return `
+            <section class="content-card course-chapter-card" id="${slugify(chapter)}">
+              <div class="course-chapter-head">
+                <div>
+                  <span class="eyebrow">${esc(courseName)}</span>
+                  <h2>${esc(chapter)}</h2>
+                </div>
+                <span class="q-badge">${chapterQuestions.length} questions</span>
+              </div>
+              <div class="course-chapter-thumb-wrap">
+                ${renderThumbPlaceholder({
+                  variant: "chapter",
+                  subject: courseName,
+                  label: courseName,
+                  title: chapter,
+                  subtitle: topicCountLabel
+                })}
+              </div>
+              ${Object.entries(byTopic).map(([topic, topicQuestions]) => `
+                <div class="course-topic-block">
+                  <h3>${esc(topic)}</h3>
+                  <div class="course-question-grid">
+                    ${topicQuestions.map((question) => `
+                      <a class="course-question-card has-cs4-thumb" href="${esc(questionPath(question))}">
+                        ${renderThumbPlaceholder({
+                          variant: "course-question",
+                          subject: question.course || courseName,
+                          label: question.course || courseName,
+                          title: question.chapter || chapter,
+                          subtitle: question.topic || topic
+                        })}
+                        <strong>${esc(plainText(question.question))}</strong>
+                        <span>${esc(question.type)} / ${esc(question.section)} / ${esc(question.year)}</span>
+                      </a>
+                    `).join("")}
+                  </div>
+                </div>
+              `).join("")}
+            </section>
+          `;
+        }).join("");
+      }
+
+      if (window.questionsDataReady) {
+        await window.questionsDataReady.catch(() => {});
+      }
+      const questions = Array.isArray(window.questionsData) ? window.questionsData : [];
+      const catalog = await loadCourseCatalog();
+      const slugMap = new Map(catalog.map((course) => [course.slug, course.name]));
+      const requestedRaw = new URLSearchParams(window.location.search).get("course") || "";
+      const requestedSlug = slugify(requestedRaw);
+
+      let selectedCourseName = slugMap.get(requestedSlug) || "";
+      if (!selectedCourseName && requestedRaw) {
+        selectedCourseName = questions.find((q) => slugify(q.course) === requestedSlug)?.course || "";
+      }
+      if (!selectedCourseName && catalog.length > 0) {
+        selectedCourseName = catalog[0].name;
+      }
+
+      renderCourseMenus(catalog, requestedSlug || slugify(selectedCourseName));
+      renderCourseBody(selectedCourseName, questions);
+      if (typeof initializeSearch === "function") initializeSearch();
+    })();
+  </script>
+</body>
+</html>
+
+
+
+

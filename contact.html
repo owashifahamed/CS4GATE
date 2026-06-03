@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact - CS4GATE</title>
+  <meta name="description" content="Contact CS4GATE for GATE Computer Science practice feedback, question corrections, feature requests, and support.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cs4gate.com/contact.html">
+  <meta property="og:title" content="Contact CS4GATE">
+  <meta property="og:description" content="Reach CS4GATE for question corrections, feature feedback, and support.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cs4gate.com/contact.html">
+    <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Contact CS4GATE">
+  <meta name="twitter:description" content="Contact CS4GATE for question corrections, feature feedback, and support.">
+  <meta name="twitter:url" content="https://cs4gate.com/contact.html">
+<link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="landing-nav">
+    <a class="auth-logo" href="index.html">CS4GATE</a>
+    <nav aria-label="Primary navigation">
+      <a href="about.html">About</a>
+      <a href="paid.html">Pricing</a>
+      <a href="contact.html">Contact</a>
+      <button class="landing-theme-toggle" type="button" data-landing-theme-toggle aria-label="Switch theme"><i class="fas fa-moon"></i><span>Dark</span></button>
+      <a class="btn btn-outline" href="signin.html">Sign In</a>
+    </nav>
+  </header>
+
+  <main class="landing-page">
+    <section class="content-hero">
+      <span class="eyebrow">Contact</span>
+      <h1>Need help with your preparation workspace?</h1>
+      <p>Send feedback, report question issues, ask for account help, or request paid access. Your message is saved for admin review and can be handled from the dashboard.</p>
+    </section>
+    <section class="contact-layout">
+      <form class="content-card contact-form" id="contactForm">
+        <label class="form-honeypot" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><span>Website</span><input id="contactWebsite" type="text" tabindex="-1" autocomplete="off"></label>
+        <label><span>Name</span><input id="contactName" type="text" placeholder="Your name" required></label>
+        <label><span>Email</span><input id="contactEmail" type="email" placeholder="you@example.com" required></label>
+        <label><span>Topic</span><select id="contactTopic" required><option>Question correction</option><option>Feature request</option><option>Account help</option><option>Other</option></select></label>
+        <label><span>Message</span><textarea id="contactMessage" rows="5" placeholder="Write your message..." required></textarea></label>
+        <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+        <div id="contactResult" class="auth-message info" aria-live="polite"></div>
+      </form>
+      <aside class="content-card">
+        <i class="fas fa-headset"></i><h2>Support Channels</h2>
+        <p><strong>Support:</strong> Use this form for question corrections, account help, paid access requests, and feature feedback.</p>
+        <p><strong>Response time:</strong> Messages are reviewed from the admin dashboard, usually within 1-2 working days when support is active.</p>
+        <p><strong>Tip:</strong> Include the question ID, account email, and a short description when reporting a problem.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <span>Copyright 2026 CS4GATE</span>
+  </footer>
+  <script src="landing-theme.js?v=20260531contrast1"></script>
+  <script>
+    let contactCsrfTokenPromise = null;
+    async function getContactCsrfToken() {
+      if (!contactCsrfTokenPromise) {
+        contactCsrfTokenPromise = fetch("api/auth.php?action=csrf", {
+          cache: "no-store",
+          credentials: "same-origin"
+        })
+          .then(res => res.ok ? res.json() : Promise.reject(new Error("Could not prepare secure request.")))
+          .then(payload => payload.csrfToken || "");
+      }
+      return contactCsrfTokenPromise;
+    }
+
+    document.getElementById("contactForm")?.addEventListener("submit", async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const result = document.getElementById("contactResult");
+      const button = form.querySelector("button[type='submit']");
+      result.className = "auth-message info";
+      result.textContent = "Sending...";
+      button.disabled = true;
+      try {
+        const csrfToken = await getContactCsrfToken();
+        const res = await fetch("api/contact.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            name: document.getElementById("contactName").value.trim(),
+            email: document.getElementById("contactEmail").value.trim(),
+            topic: document.getElementById("contactTopic").value,
+            message: document.getElementById("contactMessage").value.trim(),
+            website: document.getElementById("contactWebsite").value.trim()
+          })
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(payload.error || "Message could not be sent.");
+        form.reset();
+        result.className = "auth-message success";
+        result.textContent = "Message sent. It is now visible in admin moderation.";
+      } catch (err) {
+        result.className = "auth-message error";
+        result.textContent = err.message;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

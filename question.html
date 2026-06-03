@@ -1,0 +1,789 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive CS4GATE question practice page with answer checking, theory, solution, notes, and comments.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Question - CS4GATE</title>
+  <link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="nav-left">
+    <i class="fas fa-bars hamburger" aria-label="Menu"></i>
+    <div class="logo"><a href="index.html">CS4GATE</a></div>
+  </div>
+  <div class="nav-search">
+    <input id="searchInput" type="text" placeholder="Search..." autocomplete="off">
+  </div>
+  <div class="nav-right">
+    <i class="fas fa-search mobile-search" aria-label="Search"></i>
+    <i class="fas fa-sliders-h mobile-slider" aria-label="Settings"></i>
+    <div class="desktop-icons">
+      <i class="fas fa-moon theme-toggle" aria-label="Theme"></i>
+      <i class="fas fa-star" id="bookmarkTop" aria-label="Bookmark" style="cursor:pointer"></i>
+      <i class="fas fa-bell" aria-label="Notifications"></i>
+      <i class="fas fa-user" aria-label="Profile"></i>
+    </div>
+  </div>
+</header>
+
+<!-- ================= SIDEBAR ================= -->
+<aside class="sidebar">
+  <div class="sidebar-menu"></div>
+  <div class="sidebar-footer">
+    <i class="fas fa-user-circle"></i>
+    <span>Welcome, Aspirant</span>
+  </div>
+</aside>
+
+<!-- ================= RIGHT PANEL ================= -->
+<aside class="right-panel">
+  <div class="panel-header">
+    <span>Settings</span>
+    <i class="fas fa-times close-panel" aria-label="Close"></i>
+  </div>
+  <div class="panel-item theme-toggle">
+    <span><i class="fas fa-moon"></i> &nbsp;Dark Mode</span>
+    <div class="switch"></div>
+  </div>
+  <div class="panel-item"><span><i class="fas fa-bell"></i> &nbsp;Notifications</span></div>
+  <div class="panel-item"><span><i class="fas fa-user"></i> &nbsp;Profile</span></div>
+  <div class="panel-item"><span><i class="fas fa-cog"></i> &nbsp;Settings</span></div>
+  <div class="panel-item"><span><i class="fas fa-info-circle"></i> &nbsp;About</span></div>
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ================= MAIN ================= -->
+<div class="container">
+  <div class="content">
+    <div class="main">
+
+      <!-- Search results overlay (when user types in nav) -->
+      <div id="searchResults" style="display:none;"></div>
+
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" id="breadcrumbs"></nav>
+
+      <!-- Question view -->
+      <div id="qview"></div>
+
+      <!-- Prev / Next -->
+      <div class="q-nav">
+        <button id="prevBtn" class="q-nav-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+        <button id="nextBtn" class="q-nav-btn">Next <i class="fas fa-arrow-right"></i></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer class="landing-footer app-footer">
+  <a id="questionFooterHome" href="free.html">Home</a>
+  <a href="questions/index.html">Public Questions</a>
+  <a href="paid.html">Pricing</a>
+  <a href="contact.html">Contact</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <span>Copyright 2026 CS4GATE</span>
+</footer>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- Scripts -->
+<script src="questionsData.js?v=20260520resilient"></script>
+<script src="thumb-placeholders.js?v=20260531group2"></script>
+<script src="search.js?v=20260520resilient"></script>
+<script src="script.js?v=20260531contrast1"></script>
+
+<!-- ================= QUESTION DETAIL LOGIC ================= -->
+<script>
+(async function () {
+  "use strict";
+
+  if (window.questionsDataReady) await window.questionsDataReady;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get("id"));
+  const highlightQuery = params.get("q") || "";
+  const source = (params.get("src") || "").toLowerCase();
+  const qview = document.getElementById("qview");
+  const resultsBox = document.getElementById("searchResults");
+  const q = questionsData.find(item => item.id === id);
+  let csrfTokenPromise = null;
+
+  async function getCsrfToken() {
+    if (!csrfTokenPromise) {
+      csrfTokenPromise = fetch("api/auth.php?action=csrf", {
+        cache: "no-store",
+        credentials: "same-origin"
+      })
+        .then(res => res.ok ? res.json() : Promise.reject(new Error("Could not prepare secure request.")))
+        .then(payload => payload.csrfToken || "");
+    }
+    return csrfTokenPromise;
+  }
+
+  function esc(s) {
+    if (s == null) return "";
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
+
+  function highlight(text, keyword) {
+    if (!text) return "";
+    const safe = esc(text);
+    if (!keyword) return safe;
+    let out = safe;
+    keyword.trim().split(/\s+/).filter(w => w.length > 1).forEach(w => {
+      const re = new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+      out = out.replace(re, m => `<mark>${m}</mark>`);
+    });
+    return out;
+  }
+
+  const RICH_ALLOWED_TAGS = new Set([
+    "h1", "h2", "h3", "h4", "h5", "h6",
+    "table", "thead", "tbody", "tfoot", "tr", "th", "td",
+    "p", "br", "ul", "ol", "li",
+    "strong", "em", "b", "i", "u",
+    "code", "pre", "sub", "sup", "hr",
+    "div", "span", "img"
+  ]);
+
+  const RICH_ALLOWED_ATTRS = {
+    table: new Set(["border", "cellpadding", "cellspacing"]),
+    th: new Set(["colspan", "rowspan", "scope"]),
+    td: new Set(["colspan", "rowspan"]),
+    div: new Set(["class"]),
+    span: new Set(["class"]),
+    img: new Set(["src", "alt", "loading", "width", "height"])
+  };
+
+  function escapeRegex(s) {
+    return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function safeQuestionImageSrc(value) {
+    let src = String(value || "").trim().replace(/^https?:\/\/[^/]+\//i, "/").replace(/^\.\//, "");
+    src = src.replace(/^\/+/, "").replace(/^\.\.\//, "");
+    if (!/^uploads\/questions\/[A-Za-z0-9._-]+\.(png|jpe?g|webp|gif)$/i.test(src)) return "";
+    return src;
+  }
+
+  function sanitizeRichNode(node, doc) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return doc.createTextNode(node.textContent || "");
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return doc.createTextNode("");
+    }
+
+    const tag = node.tagName.toLowerCase();
+    if (!RICH_ALLOWED_TAGS.has(tag)) {
+      const fragment = doc.createDocumentFragment();
+      [...node.childNodes].forEach(child => {
+        fragment.appendChild(sanitizeRichNode(child, doc));
+      });
+      return fragment;
+    }
+
+    const clean = doc.createElement(tag);
+    if (tag === "img") {
+      const src = safeQuestionImageSrc(node.getAttribute("src"));
+      if (!src) return doc.createTextNode("");
+      clean.setAttribute("src", src);
+      clean.setAttribute("alt", (node.getAttribute("alt") || "Question image").trim().slice(0, 160));
+      const loading = (node.getAttribute("loading") || "lazy").trim().toLowerCase();
+      clean.setAttribute("loading", loading === "eager" ? "eager" : "lazy");
+      clean.setAttribute("decoding", "async");
+      ["width", "height"].forEach(name => {
+        const value = (node.getAttribute(name) || "").trim();
+        if (/^\d{1,4}$/.test(value)) clean.setAttribute(name, value);
+      });
+      clean.className = "question-image";
+      return clean;
+    }
+
+    const attrAllow = RICH_ALLOWED_ATTRS[tag];
+    if (attrAllow) {
+      [...node.attributes].forEach(attr => {
+        const name = attr.name.toLowerCase();
+        const value = attr.value.trim();
+        if (!attrAllow.has(name)) return;
+        if ((name === "colspan" || name === "rowspan") && !/^\d{1,2}$/.test(value)) return;
+        if (name === "scope" && !/^(row|col|rowgroup|colgroup)$/i.test(value)) return;
+        clean.setAttribute(name, value);
+      });
+    }
+
+    [...node.childNodes].forEach(child => {
+      clean.appendChild(sanitizeRichNode(child, doc));
+    });
+    return clean;
+  }
+
+  function sanitizeRichHtml(raw) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${raw == null ? "" : String(raw)}</div>`, "text/html");
+    const root = doc.body.firstElementChild;
+    const cleanRoot = doc.createElement("div");
+    if (!root) return "";
+    [...root.childNodes].forEach(child => {
+      cleanRoot.appendChild(sanitizeRichNode(child, doc));
+    });
+    return cleanRoot.innerHTML;
+  }
+
+  function applyHighlightsToHtml(html, keyword) {
+    if (!keyword || !keyword.trim()) return html;
+    const terms = keyword
+      .trim()
+      .split(/\s+/)
+      .map(item => item.trim())
+      .filter(item => item.length > 1);
+    if (!terms.length) return html;
+
+    const root = document.createElement("div");
+    root.innerHTML = html;
+    const regex = new RegExp(`(${terms.map(escapeRegex).join("|")})`, "gi");
+    const textNodes = [];
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const current = walker.currentNode;
+      if (current?.parentElement?.closest("mark")) continue;
+      textNodes.push(current);
+    }
+
+    textNodes.forEach(node => {
+      const value = node.nodeValue || "";
+      if (!regex.test(value)) return;
+      regex.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let lastIndex = 0;
+      value.replace(regex, (match, _group, offset) => {
+        if (offset > lastIndex) {
+          frag.appendChild(document.createTextNode(value.slice(lastIndex, offset)));
+        }
+        const mark = document.createElement("mark");
+        mark.textContent = match;
+        frag.appendChild(mark);
+        lastIndex = offset + match.length;
+        return match;
+      });
+      if (lastIndex < value.length) {
+        frag.appendChild(document.createTextNode(value.slice(lastIndex)));
+      }
+      node.parentNode?.replaceChild(frag, node);
+    });
+
+    return root.innerHTML;
+  }
+
+  function renderRichContent(text, keyword) {
+    const safeHtml = sanitizeRichHtml(text);
+    return applyHighlightsToHtml(safeHtml, keyword);
+  }
+
+  function richTextToPlain(value) {
+    const holder = document.createElement("div");
+    holder.innerHTML = value == null ? "" : String(value);
+    return (holder.textContent || "").replace(/\s+/g, " ").trim();
+  }
+
+  function getCurrentUser() {
+    try { return JSON.parse(localStorage.getItem("soaGateCurrentUser")); }
+    catch { return null; }
+  }
+
+  function inferSource() {
+    if (source === "free" || source === "paid") return source;
+    const ref = document.referrer.toLowerCase();
+    if (ref.includes("/free.html")) return "free";
+    if (ref.includes("/paid-dashboard.html")) return "paid";
+    return getCurrentUser()?.plan === "paid" ? "paid" : "free";
+  }
+
+  const dashboardSource = inferSource();
+  const homeHref = dashboardSource === "paid" ? "paid-dashboard.html" : "free.html";
+  document.getElementById("questionFooterHome")?.setAttribute("href", homeHref);
+
+  function buildFilteredHref(filters) {
+    const p = new URLSearchParams();
+    if (filters.course) p.set("course", filters.course);
+    if (filters.chapter) p.set("chapter", filters.chapter);
+    if (filters.topic) p.set("topic", filters.topic);
+    if (filters.section) p.set("section", filters.section);
+    return `${homeHref}?${p.toString()}`;
+  }
+
+  // ---- Stopwatch ----
+  let seconds = 0, timerInterval = null;
+  function startTimer() {
+    const el = document.getElementById("stopwatch");
+    if (!el) return;
+    timerInterval = setInterval(() => {
+      seconds++;
+      const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const s = String(seconds % 60).padStart(2, "0");
+      el.textContent = `${m}:${s}`;
+    }, 1000);
+  }
+  function stopTimer() { if (timerInterval) clearInterval(timerInterval); }
+
+  // ---- Render ----
+  if (!q) {
+    qview.innerHTML = `<div class="empty"><div class="emoji">?</div>
+      <h3>Question not found</h3>
+      <p><a href="${homeHref}" style="color:var(--primary)">Back to dashboard</a></p></div>`;
+    document.getElementById("prevBtn").disabled = true;
+    document.getElementById("nextBtn").disabled = true;
+    return;
+  }
+
+  const questionPlainText = richTextToPlain(q.question);
+  document.title = questionPlainText.slice(0, 60) + " - CS4GATE";
+
+  // Breadcrumbs
+  document.getElementById("breadcrumbs").innerHTML = `
+    <a href="${homeHref}">Home</a><span class="sep">/</span>
+    <a href="${buildFilteredHref({ course: q.course })}">${esc(q.course)}</a><span class="sep">/</span>
+    <a href="${buildFilteredHref({ course: q.course, chapter: q.chapter })}">${esc(q.chapter)}</a><span class="sep">/</span>
+    <a href="${buildFilteredHref({ course: q.course, chapter: q.chapter, topic: q.topic })}">${esc(q.topic)}</a><span class="sep">/</span>
+    <a href="${buildFilteredHref({ course: q.course, chapter: q.chapter, topic: q.topic, section: q.section })}">${esc(q.section)}</a>
+  `;
+
+  // Top bookmark
+  const bmBtn = document.getElementById("bookmarkTop");
+  function syncBM() {
+    const b = (window.SOA && window.SOA.isBookmarked) ? window.SOA.isBookmarked(q.id) : false;
+    bmBtn.classList.toggle("fas", b);
+    bmBtn.classList.toggle("far", !b);
+    bmBtn.style.color = b ? "var(--accent)" : "";
+  }
+  syncBM();
+  bmBtn.addEventListener("click", () => {
+    if (window.SOA) window.SOA.toggleBookmark(q.id);
+    syncBM();
+  });
+
+  // Build options HTML
+  function optionsHtml() {
+    if (q.type === "MCQ" && Array.isArray(q.options)) {
+      return `<ul class="options-list">${q.options.map((o, i) => `
+        <li class="option-item" data-pick="${esc(o)}">
+          <span class="option-marker">${String.fromCharCode(65 + i)}</span>${esc(o)}
+        </li>`).join("")}</ul>`;
+    }
+    if (q.type === "MSQ" && Array.isArray(q.options)) {
+      return `<ul class="options-list">${q.options.map((o, i) => `
+        <li class="option-item" data-pick-multi="${esc(o)}">
+          <span class="option-marker">${String.fromCharCode(65 + i)}</span>${esc(o)}
+        </li>`).join("")}</ul>
+        <button class="btn btn-primary" id="msqSubmit">Submit Answer</button>`;
+    }
+    if (q.type === "NAT") {
+      return `<input type="text" id="natInput" class="nat-input" placeholder="Enter your numerical answer">
+              <button class="btn btn-primary" id="natSubmit">Check Answer</button>`;
+    }
+    return "";
+  }
+
+  function similarHtml() {
+    const similar = questionsData
+      .filter(item => item.id !== q.id && (item.topic === q.topic || item.chapter === q.chapter))
+      .slice(0, 4);
+    if (!similar.length) return "";
+    return `<div class="q-section-title"><i class="fas fa-link"></i> Similar Questions</div>
+      <div class="similar-list">${similar.map(item => `
+        <a class="similar-item" href="question.html?id=${item.id}${source ? `&src=${encodeURIComponent(source)}` : ""}">
+          <strong>${esc(item.question.slice(0, 90))}${item.question.length > 90 ? "..." : ""}</strong>
+          <span>${esc(item.course)} / ${esc(item.topic)}</span>
+        </a>`).join("")}</div>`;
+  }
+
+  function commentsHtml() {
+    return `
+      <div class="q-section-title"><i class="fas fa-comments"></i> Comments</div>
+      <div class="comments-box">
+        <div class="discussion-toolbar">
+          <button class="btn btn-outline" id="likeQuestionBtn" type="button"><i class="far fa-thumbs-up"></i> <span id="likeQuestionText">Like</span></button>
+          <span id="interactionStatus" class="discussion-status"></span>
+        </div>
+        <div id="commentsList" class="comments-list"></div>
+        <div class="comment-form">
+          <textarea id="commentInput" rows="3" placeholder="Ask a doubt, add a correction, or write a discussion note..."></textarea>
+          <button class="btn btn-primary" id="addCommentBtn"><i class="fas fa-paper-plane"></i> Add Comment</button>
+        </div>
+      </div>`;
+  }
+
+  function checkAnswer(given) {
+    if (given == null || given === "" || (Array.isArray(given) && !given.length)) return false;
+    if (q.type === "MSQ") {
+      if (!Array.isArray(q.answer)) return false;
+      return [...q.answer].sort().join("|") === [...given].sort().join("|");
+    }
+    if (q.type === "NAT") return String(q.answer ?? "").trim() === String(given).trim();
+    return q.answer === given;
+  }
+
+  function renderQuestion() {
+    qview.innerHTML = `
+      <div class="q-card">
+        <div class="q-meta">
+          <div class="q-meta-left">
+            <span class="type-badge ${q.type}">${q.type}</span>
+            <span class="difficulty-badge ${(window.SOA && window.SOA.inferDifficulty) ? window.SOA.inferDifficulty(q) : "Easy"}">${(window.SOA && window.SOA.inferDifficulty) ? window.SOA.inferDifficulty(q) : "Easy"}</span>
+            <span class="q-badge">${esc(q.year)}</span>
+            <span class="q-badge">${esc(q.section)}</span>
+            <span class="q-badge">${esc(q.topic)}</span>
+          </div>
+          <div class="q-meta-right">
+            <span id="stopwatch">00:00</span>
+          </div>
+        </div>
+
+        <div class="q-section-title"><i class="fas fa-question-circle"></i> Question</div>
+        <div class="q-question-text">${renderRichContent(q.question, highlightQuery)}</div>
+
+        <div id="answerArea">${optionsHtml()}</div>
+        <div id="feedbackArea"></div>
+
+        <div class="q-section-title"><i class="fas fa-book"></i> Theory</div>
+        <button class="q-toggle-btn" id="theoryBtn"><i class="fas fa-eye"></i> Show Theory</button>
+        <div class="q-content-box" id="theoryBox">${renderRichContent(q.theory, highlightQuery)}</div>
+
+        <div class="q-section-title"><i class="fas fa-lightbulb"></i> Solution</div>
+        <button class="q-toggle-btn" id="solutionBtn"><i class="fas fa-eye"></i> Show Solution</button>
+        <div class="q-content-box" id="solutionBox">${renderRichContent(q.solution, highlightQuery)}</div>
+
+        <div class="assessment-actions">
+          <button class="btn btn-outline" id="revisionBtn"><i class="far fa-flag"></i> Mark for Revision</button>
+        </div>
+        <div class="q-section-title"><i class="fas fa-note-sticky"></i> Private Note</div>
+        <textarea id="noteBox" class="admin-json" rows="4" placeholder="Write your own shortcut, formula, or reminder for this question..."></textarea>
+        <div class="assessment-actions"><button class="btn btn-primary" id="saveNoteBtn"><i class="fas fa-save"></i> Save Note</button></div>
+        ${commentsHtml()}
+        ${similarHtml()}
+      </div>
+    `;
+
+    startTimer();
+
+    const revisionBtn = document.getElementById("revisionBtn");
+    function syncRevision() {
+      const active = window.SOA && window.SOA.isRevisionMarked(q.id);
+      revisionBtn.classList.toggle("active", active);
+      revisionBtn.innerHTML = active ? '<i class="fas fa-flag"></i> In Revision List' : '<i class="far fa-flag"></i> Mark for Revision';
+    }
+    syncRevision();
+    revisionBtn.addEventListener("click", () => {
+      if (window.SOA) window.SOA.toggleRevision(q.id);
+      syncRevision();
+    });
+
+    const noteBox = document.getElementById("noteBox");
+    const commentInput = document.getElementById("commentInput");
+    const commentsList = document.getElementById("commentsList");
+    const statusEl = document.getElementById("interactionStatus");
+    const likeBtn = document.getElementById("likeQuestionBtn");
+    const likeText = document.getElementById("likeQuestionText");
+    let liveInteractions = { comments: [], likes: { count: 0, userLiked: false }, note: "", signedIn: false };
+
+    function setInteractionStatus(message, type = "info") {
+      if (!statusEl) return;
+      statusEl.textContent = message || "";
+      statusEl.dataset.type = type;
+    }
+
+    async function interactionRequest(body) {
+      const csrfToken = await getCsrfToken();
+      const res = await fetch("api/interactions.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+        credentials: "same-origin",
+        body: JSON.stringify(body)
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || "Interaction request failed.");
+      return payload;
+    }
+
+    function syncLikeButton() {
+      const count = liveInteractions.likes?.count || 0;
+      const liked = !!liveInteractions.likes?.userLiked;
+      likeBtn.classList.toggle("active", liked);
+      likeBtn.innerHTML = `<i class="${liked ? "fas" : "far"} fa-thumbs-up"></i> <span id="likeQuestionText">${liked ? "Liked" : "Like"}${count ? ` (${count})` : ""}</span>`;
+    }
+
+    function renderComments() {
+      const comments = liveInteractions.comments || [];
+      commentsList.innerHTML = comments.length ? comments.map((comment, index) => `
+        <div class="comment-item">
+          <div class="comment-meta">
+            <strong>${esc(comment.authorName || comment.name || "Aspirant")}</strong>
+            <span>${esc(comment.createdAt || comment.date || "")}</span>
+            ${comment.status === "pending" ? '<span class="q-badge">Pending</span>' : ""}
+          </div>
+          <p>${esc(comment.body || comment.text)}</p>
+          ${comment.canDelete ? `<button class="comment-delete" data-comment-id="${comment.id}" data-comment-index="${index}"><i class="fas fa-trash"></i> Delete</button>` : ""}
+        </div>
+      `).join("") : `<div class="empty compact"><h3>No comments yet</h3><p>Start the discussion for this question.</p></div>`;
+
+      commentsList.querySelectorAll("[data-comment-id]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          try {
+            await interactionRequest({
+              action: "deleteComment",
+              questionId: q.id,
+              course: q.course,
+              commentId: Number(btn.dataset.commentId)
+            });
+            await loadInteractions();
+            setInteractionStatus("Comment deleted.", "success");
+          } catch (err) {
+            setInteractionStatus(err.message, "error");
+          }
+        });
+      });
+    }
+
+    async function loadInteractions() {
+      try {
+        const res = await fetch(`api/interactions.php?questionId=${encodeURIComponent(q.id)}&course=${encodeURIComponent(q.course || "")}`, {
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(payload.error || "Could not load discussion.");
+        liveInteractions = payload;
+        noteBox.value = payload.note || "";
+        syncLikeButton();
+        renderComments();
+        setInteractionStatus(payload.signedIn ? "" : "Sign in to comment, like, bookmark, and save notes.", "info");
+      } catch (err) {
+        renderComments();
+        setInteractionStatus("Live discussion is unavailable right now.", "error");
+      }
+    }
+
+    document.getElementById("saveNoteBtn").addEventListener("click", async () => {
+      try {
+        await interactionRequest({ action: "note", questionId: q.id, course: q.course, note: noteBox.value });
+        setInteractionStatus("Note saved.", "success");
+      } catch (err) {
+        setInteractionStatus(err.message, "error");
+      }
+    });
+
+    likeBtn.addEventListener("click", async () => {
+      try {
+        const nextLiked = !liveInteractions.likes?.userLiked;
+        const payload = await interactionRequest({ action: "like", questionId: q.id, course: q.course, liked: nextLiked });
+        liveInteractions.likes = { count: payload.count, userLiked: payload.userLiked };
+        syncLikeButton();
+        setInteractionStatus(payload.userLiked ? "Liked." : "Like removed.", "success");
+      } catch (err) {
+        setInteractionStatus(err.message, "error");
+      }
+    });
+
+    document.getElementById("addCommentBtn").addEventListener("click", async () => {
+      const text = commentInput.value.trim();
+      if (!text) return;
+      try {
+        const payload = await interactionRequest({ action: "comment", questionId: q.id, course: q.course, body: text });
+        commentInput.value = "";
+        await loadInteractions();
+        setInteractionStatus(payload.status === "pending" ? "Comment sent for moderation." : "Comment posted.", "success");
+      } catch (err) {
+        setInteractionStatus(err.message, "error");
+      }
+    });
+    loadInteractions();
+
+    // Toggles
+    document.getElementById("theoryBtn").addEventListener("click", () => {
+      const box = document.getElementById("theoryBox");
+      box.style.display = "block";
+      document.getElementById("theoryBtn").style.display = "none";
+      box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+    document.getElementById("solutionBtn").addEventListener("click", () => {
+      const box = document.getElementById("solutionBox");
+      box.style.display = "block";
+      document.getElementById("solutionBtn").style.display = "none";
+      box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      stopTimer();
+    });
+
+    // Answer handlers
+    let answered = false;
+    function showFeedback(isCorrect) {
+      const fa = document.getElementById("feedbackArea");
+      fa.innerHTML = `<div class="feedback-msg ${isCorrect ? "correct" : "wrong"}">
+        ${isCorrect ? "Correct." : "Incorrect."}
+        ${!isCorrect && q.answer ? ` Correct answer: <strong>${esc(Array.isArray(q.answer) ? q.answer.join(", ") : q.answer)}</strong>` : ""}
+      </div>`;
+      if (window.SOA) window.SOA.recordAttempt(q.id, isCorrect);
+      // Auto-reveal solution
+      const sBox = document.getElementById("solutionBox");
+      sBox.style.display = "block";
+      const sBtn = document.getElementById("solutionBtn");
+      if (sBtn) sBtn.style.display = "none";
+    }
+
+    // MCQ
+    qview.querySelectorAll("[data-pick]").forEach(el => {
+      el.addEventListener("click", () => {
+        if (answered) return;
+        answered = true;
+        const picked = el.dataset.pick;
+        const correct = checkAnswer(picked);
+        qview.querySelectorAll("[data-pick]").forEach(opt => {
+          if (opt.dataset.pick === q.answer) opt.classList.add("correct");
+          else if (opt === el) opt.classList.add("wrong");
+        });
+        showFeedback(correct);
+      });
+    });
+
+    // MSQ
+    const msqSel = new Set();
+    qview.querySelectorAll("[data-pick-multi]").forEach(el => {
+      el.addEventListener("click", () => {
+        if (answered) return;
+        const v = el.dataset.pickMulti;
+        if (msqSel.has(v)) { msqSel.delete(v); el.classList.remove("selected"); }
+        else { msqSel.add(v); el.classList.add("selected"); }
+      });
+    });
+    document.getElementById("msqSubmit")?.addEventListener("click", () => {
+      if (answered) return;
+      answered = true;
+      const sel = [...msqSel];
+      const correct = checkAnswer(sel);
+      qview.querySelectorAll("[data-pick-multi]").forEach(el => {
+        const v = el.dataset.pickMulti;
+        if (Array.isArray(q.answer) && q.answer.includes(v)) el.classList.add("correct");
+        else if (el.classList.contains("selected")) el.classList.add("wrong");
+      });
+      showFeedback(correct);
+    });
+
+    // NAT
+    document.getElementById("natSubmit")?.addEventListener("click", () => {
+      if (answered) return;
+      answered = true;
+      const v = document.getElementById("natInput").value;
+      const correct = checkAnswer(v);
+      const inp = document.getElementById("natInput");
+      inp.style.borderColor = correct ? "var(--success)" : "var(--danger)";
+      showFeedback(correct);
+    });
+
+    typesetQuestionMath();
+  }
+
+  function questionNeedsMath() {
+    const source = [q.question, q.theory, q.solution].join("\n");
+    return /\\\(|\\\[|\\frac|\\log|\\text|\\sum|\\sqrt|\\left|\\right|_\{|\^\{|[A-Za-z0-9]\^[A-Za-z0-9]|[A-Za-z0-9]_[A-Za-z0-9]/.test(source);
+  }
+
+  function ensureMathJax() {
+    if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+      return Promise.resolve();
+    }
+    if (window.__cs4gateMathJaxLoading) return window.__cs4gateMathJaxLoading;
+
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]'], ['$$', '$$']]
+      },
+      svg: { fontCache: 'global' }
+    };
+
+    window.__cs4gateMathJaxLoading = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js";
+      script.defer = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error("MathJax failed to load"));
+      document.head.appendChild(script);
+    });
+    return window.__cs4gateMathJaxLoading;
+  }
+
+  function typesetQuestionMath() {
+    if (!questionNeedsMath()) return;
+    ensureMathJax()
+      .then(() => {
+        if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+          return window.MathJax.typesetPromise([qview]);
+        }
+        return null;
+      })
+      .catch(() => {});
+  }
+
+  renderQuestion();
+
+  // Prev / Next
+  const idx = questionsData.findIndex(item => item.id === id);
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  if (idx > 0) {
+    prevBtn.onclick = () => {
+      window.location.href = `question.html?id=${questionsData[idx - 1].id}`
+        + (highlightQuery ? `&q=${encodeURIComponent(highlightQuery)}` : "")
+        + (source ? `&src=${encodeURIComponent(source)}` : "");
+    };
+  } else { prevBtn.disabled = true; }
+  if (idx >= 0 && idx < questionsData.length - 1) {
+    nextBtn.onclick = () => {
+      window.location.href = `question.html?id=${questionsData[idx + 1].id}`
+        + (highlightQuery ? `&q=${encodeURIComponent(highlightQuery)}` : "")
+        + (source ? `&src=${encodeURIComponent(source)}` : "");
+    };
+  } else { nextBtn.disabled = true; }
+
+  // When a search is typed, hide question view and show results
+  const obs = new MutationObserver(() => {
+    if (resultsBox.innerHTML.trim() !== "") {
+      resultsBox.style.display = "block";
+      qview.style.display = "none";
+      document.querySelector(".q-nav").style.display = "none";
+      document.querySelector(".breadcrumbs").style.display = "none";
+    } else {
+      resultsBox.style.display = "none";
+      qview.style.display = "block";
+      document.querySelector(".q-nav").style.display = "flex";
+      document.querySelector(".breadcrumbs").style.display = "flex";
+    }
+  });
+  obs.observe(resultsBox, { childList: true, subtree: true });
+})();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

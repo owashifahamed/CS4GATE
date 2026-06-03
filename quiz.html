@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Paid Quiz Studio for GATE CS practice. Build timed quizzes by subject, chapter, topic, and type.">
+  <meta name="robots" content="noindex, nofollow">
+    <script src="auth-guard.js?v=20260518safe" data-require="paid" data-public-target="index.html" data-upgrade-target="paid.html"></script>
+<title>Quiz Studio - CS4GATE</title>
+  <link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body data-assessment="quiz">
+
+<header class="navbar">
+  <div class="nav-left">
+    <i class="fas fa-bars hamburger" aria-label="Menu"></i>
+    <div class="logo"><a href="index.html">CS4GATE</a></div>
+  </div>
+  <div class="nav-search">
+    <input id="searchInput" type="text" placeholder="Search questions, topics, years..." autocomplete="off">
+  </div>
+  <div class="nav-right">
+    <i class="fas fa-search mobile-search" aria-label="Search"></i>
+    <i class="fas fa-sliders-h mobile-slider" aria-label="Settings"></i>
+    <div class="desktop-icons">
+      <i class="fas fa-moon theme-toggle" aria-label="Toggle theme" title="Toggle theme"></i>
+      <i class="fas fa-bell" aria-label="Notifications"></i>
+      <i class="fas fa-user" aria-label="Profile"></i>
+    </div>
+  </div>
+</header>
+
+<aside class="sidebar">
+  <div class="sidebar-menu"></div>
+  <div class="sidebar-footer"><i class="fas fa-user-circle"></i><span>Welcome, Aspirant</span></div>
+</aside>
+
+<aside class="right-panel">
+  <div class="panel-header"><span>Settings</span><i class="fas fa-times close-panel" aria-label="Close"></i></div>
+  <div class="panel-item theme-toggle"><span><i class="fas fa-moon"></i> &nbsp;Dark Mode</span><div class="switch"></div></div>
+  <div class="panel-item"><span><i class="fas fa-bell"></i> &nbsp;Notifications</span></div>
+  <div class="panel-item"><span><i class="fas fa-user"></i> &nbsp;Profile</span></div>
+  <div class="panel-item"><span><i class="fas fa-cog"></i> &nbsp;Settings</span></div>
+  <div class="panel-item"><span><i class="fas fa-info-circle"></i> &nbsp;About</span></div>
+</aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="container">
+  <div class="content">
+    <main class="main">
+      <div id="searchResults"></div>
+      <div id="assessmentRoot"></div>
+    </main>
+  </div>
+</div>
+
+<footer class="landing-footer app-footer">
+  <a href="paid-dashboard.html">Home</a>
+  <a href="questions/index.html">Question Bank</a>
+  <a href="mock-test.html">Mock Test</a>
+  <a href="analytics.html">Analytics</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <span>Copyright 2026 CS4GATE</span>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+
+<script src="questionsData.js?v=20260520resilient"></script>
+<script src="search.js?v=20260520resilient"></script>
+<script src="script.js?v=20260531contrast1"></script>
+<script src="assessment.js?v=20260529mockgate2"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

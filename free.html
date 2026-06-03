@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Dashboard - CS4GATE</title>
+  <meta name="description" content="Use the free CS4GATE dashboard for GATE Computer Science question bank search, filters, bookmarks, and progress tracking with ad spaces.">
+  <meta name="robots" content="noindex, nofollow">
+    <script src="auth-guard.js?v=20260518safe" data-require="auth" data-public-target="index.html" data-upgrade-target="paid.html"></script>
+<link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn-icons-png.flaticon.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body data-plan="free">
+<header class="navbar">
+  <div class="nav-left"><i class="fas fa-bars hamburger" aria-label="Menu"></i><div class="logo"><a href="index.html">CS4GATE</a></div></div>
+  <div class="nav-search"><input id="searchInput" type="text" placeholder="Search free question bank..." autocomplete="off"></div>
+  <div class="nav-right"><i class="fas fa-search mobile-search" aria-label="Search"></i><i class="fas fa-sliders-h mobile-slider" aria-label="Settings"></i><div class="desktop-icons"><i class="fas fa-moon theme-toggle" aria-label="Toggle theme"></i><i class="fas fa-bell" aria-label="Notifications"></i><i class="fas fa-user" aria-label="Profile"></i></div></div>
+</header>
+<aside class="sidebar"><div class="sidebar-menu"></div><div class="sidebar-footer"><i class="fas fa-user-circle"></i><span>Welcome, Aspirant</span></div></aside>
+<aside class="right-panel"><div class="panel-header"><span>Settings</span><i class="fas fa-times close-panel" aria-label="Close"></i></div><div class="panel-item theme-toggle"><span><i class="fas fa-moon"></i> &nbsp;Dark Mode</span><div class="switch"></div></div><div class="panel-item"><span><i class="fas fa-bell"></i> &nbsp;Notifications</span></div><div class="panel-item"><span><i class="fas fa-user"></i> &nbsp;Profile</span></div><div class="panel-item"><span><i class="fas fa-cog"></i> &nbsp;Settings</span></div><div class="panel-item"><span><i class="fas fa-info-circle"></i> &nbsp;About</span></div></aside>
+<div class="overlay" id="overlay"></div>
+
+<div class="container">
+  <div class="content">
+    <main class="main">
+      <section class="home-hero">
+        <div class="hero-left">
+          <span class="plan-badge free"><i class="fas fa-unlock"></i> Free Plan</span>
+          <h1>Free GATE CS Question Bank</h1>
+          <p>Practice the question bank with search, filters, bookmarks, and progress. Quiz and Mock Test are paid features.</p>
+          <div class="hero-stats" id="heroStats"></div>
+          <a class="hero-btn" href="paid.html">Upgrade to Paid</a>
+        </div>
+        <div class="hero-right"><img src="https://cdn-icons-png.flaticon.com/512/2721/2721297.png" alt="Computer Science Illustration" loading="lazy" decoding="async" width="512" height="512"></div>
+      </section>
+
+      <section class="dashboard-overview" id="dashboardOverview" aria-label="Dashboard overview"></section>
+
+      <section class="ad-slot wide">
+        <span>Sponsored Mock Practice</span>
+        <strong>GATE CS Mock Test Series (2026)</strong>
+        <p>120 full-length mocks, all-India rank, and detailed analytics for exam-style practice.</p>
+        <a class="btn btn-primary slot-cta" href="signin.html?redirect=mock-test.html">Start Free Mock</a>
+      </section>
+
+      <div class="toolbar free-toolbar">
+        <a class="btn btn-primary" href="paid.html"><i class="fas fa-crown"></i> Unlock Quiz & Mock</a>
+        <div class="filter-chips" id="filterChips"></div>
+      </div>
+
+      <h2 class="section-heading" id="listHeading">Questions</h2>
+      <div class="ad-layout">
+        <div id="searchResults"></div>
+        <aside class="ad-rail">
+          <div class="ad-slot">
+            <span>Ad Slot</span>
+            <strong>Google AdSense Ready</strong>
+            <p>Use this slot for Google ads later. Keep this card as network-managed ad space.</p>
+          </div>
+          <div class="upgrade-card"><i class="fas fa-crown"></i><h3>Paid unlocks exam mode</h3><p>Get Quiz Studio, Mock Test Studio, and an ad-free dashboard.</p><a class="btn btn-primary" href="paid.html">Upgrade</a></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+</div>
+
+<footer class="landing-footer app-footer">
+  <a href="free.html">Home</a>
+  <a href="questions/index.html">Question Bank</a>
+  <a href="paid.html">Upgrade</a>
+  <a href="contact.html">Contact</a>
+  <a href="privacy.html">Privacy Policy</a>
+  <span>Copyright 2026 CS4GATE</span>
+</footer>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+<script src="questionsData.js?v=20260520resilient"></script><script src="thumb-placeholders.js?v=20260531group2"></script><script src="search.js?v=20260520resilient"></script><script src="script.js?v=20260531contrast1"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

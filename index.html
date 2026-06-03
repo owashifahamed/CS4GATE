@@ -1,0 +1,346 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CS4GATE CS Practice | GATE Computer Science Questions, Quiz & Mock Tests</title>
+  <meta name="description" content="Prepare for GATE Computer Science with CS4GATE: subject-wise question bank, free practice dashboard, paid quizzes, mock tests, analytics, revision, and bookmarks.">
+  <meta name="keywords" content="GATE CS practice, GATE Computer Science questions, GATE mock test, GATE quiz, DBMS, Operating System, Algorithms, Computer Networks">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://cs4gate.com/">
+  <meta property="og:title" content="CS4GATE CS Practice">
+  <meta property="og:description" content="Search, practice, revise, quiz, and take mock tests for GATE Computer Science.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cs4gate.com/">
+    <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CS4GATE CS Practice">
+  <meta name="twitter:description" content="Search, practice, revise, quiz, and take mock tests for GATE Computer Science.">
+  <meta name="twitter:url" content="https://cs4gate.com/">
+<meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/2721/2721297.png">
+
+
+  <link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn-icons-png.flaticon.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://cs4gate.com/#website",
+        "name": "CS4GATE",
+        "url": "https://cs4gate.com/",
+        "description": "GATE Computer Science practice platform with question bank, quizzes, mock tests, bookmarks, revision tools, and analytics.",
+        "publisher": {
+          "@id": "https://cs4gate.com/#organization"
+        }
+      },
+      {
+        "@type": "EducationalOrganization",
+        "@id": "https://cs4gate.com/#organization",
+        "name": "CS4GATE",
+        "url": "https://cs4gate.com/",
+        "description": "GATE Computer Science practice platform with question bank, quizzes, mock tests, bookmarks, revision tools, and analytics."
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="landing-nav portal-nav">
+    <a class="auth-logo" href="index.html">CS4GATE</a>
+    <nav aria-label="Primary navigation">
+      <div class="course-menu">
+        <button type="button" class="course-menu-btn">Courses <i class="fas fa-chevron-down"></i></button>
+        <div class="course-menu-panel">
+          <a href="questions/index.html">All Questions</a>
+          <a href="questions/course-digital-electronics.html">Digital Electronics</a>
+          <a href="questions/course-data-structures.html">Data Structures</a>
+          <a href="questions/course-algorithms.html">Algorithms</a>
+          <a href="questions/course-dbms.html">DBMS</a>
+          <a href="questions/course-operating-system.html">Operating System</a>
+          <a href="questions/course-computer-networks.html">Computer Networks</a>
+          <a href="questions/course-computer-organization.html">Computer Organization</a>
+          <a href="questions/course-theory-of-computation.html">Theory of Computation</a>
+          <a href="questions/course-discrete-mathematics.html">Discrete Mathematics</a>
+        </div>
+      </div>
+      <a href="questions/index.html">Practice</a>
+      <a href="signin.html?redirect=quiz.html">Quiz</a>
+      <a href="signin.html?redirect=mock-test.html">Mock Test</a>
+      <a href="about.html">About</a>
+      <a href="paid.html">Pricing</a>
+      <button class="landing-theme-toggle" type="button" data-landing-theme-toggle aria-label="Switch theme"><i class="fas fa-moon"></i><span>Dark</span></button>
+      <a class="btn btn-outline" href="signin.html">Sign In</a>
+    </nav>
+  </header>
+
+  <nav class="course-strip" aria-label="Course shortcuts">
+    <a href="questions/index.html">All</a>
+    <a href="questions/course-digital-electronics.html">Digital Electronics</a>
+    <a href="questions/course-data-structures.html">Data Structures</a>
+    <a href="questions/course-algorithms.html">Algorithms</a>
+    <a href="questions/course-dbms.html">DBMS</a>
+    <a href="questions/course-operating-system.html">Operating System</a>
+    <a href="questions/course-computer-networks.html">Computer Networks</a>
+    <a href="questions/course-computer-organization.html">Computer Organization</a>
+    <a href="questions/course-theory-of-computation.html">Theory of Computation</a>
+    <a href="questions/course-discrete-mathematics.html">Discrete Mathematics</a>
+  </nav>
+
+  <main class="landing-page portal-page">
+    <section class="portal-hero">
+      <span class="eyebrow">GATE CS learning portal</span>
+      <h1>Hello, what do you want to practice today?</h1>
+      <p>Explore GATE Computer Science subjects, open your dashboard, and continue with free or paid practice after sign in.</p>
+      <form class="portal-search" id="portalSearchForm" action="questions/index.html">
+        <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+        <input id="portalSearchInput" type="search" placeholder="Search DBMS, OS, algorithms, networks..." aria-label="Search practice topics" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+      <div class="portal-search-results" id="portalSearchResults" aria-live="polite"></div>
+      <div class="portal-chips" aria-label="Popular topics">
+        <a href="questions/course-data-structures.html">Data Structures</a>
+        <a href="questions/course-algorithms.html">Algorithms</a>
+        <a href="questions/course-dbms.html">DBMS</a>
+        <a href="questions/course-operating-system.html">Operating System</a>
+        <a href="questions/course-computer-networks.html">Computer Networks</a>
+        <a href="questions/course-computer-organization.html">Computer Organization</a>
+        <a href="questions/course-discrete-mathematics.html">Discrete Mathematics</a>
+      </div>
+    </section>
+
+    <section class="portal-quick-grid" aria-label="Explore CS4GATE">
+      <a class="portal-tile featured" href="signin.html?redirect=free.html">
+        <i class="fas fa-book-open"></i>
+        <span>Free Dashboard</span>
+        <strong>Sign in for filters, bookmarks, comments, and revision tracking.</strong>
+      </a>
+      <a class="portal-tile" href="signin.html?redirect=quiz.html">
+        <i class="fas fa-layer-group"></i>
+        <span>Quiz Studio</span>
+        <strong>Subject-wise, chapter-wise, and topic-wise quizzes.</strong>
+      </a>
+      <a class="portal-tile" href="signin.html?redirect=mock-test.html">
+        <i class="fas fa-clipboard-check"></i>
+        <span>Mock Tests</span>
+        <strong>Timed test sessions with score cards and review.</strong>
+      </a>
+      <a class="portal-tile" href="signin.html?redirect=analytics.html">
+        <i class="fas fa-chart-line"></i>
+        <span>Analytics</span>
+        <strong>Accuracy, weak subjects, mistakes, and daily goals.</strong>
+      </a>
+    </section>
+
+    <section class="portal-authority" aria-label="CS4GATE platform authority">
+      <article class="portal-authority-card">
+        <span class="portal-authority-head">
+          <i class="fas fa-book-open" aria-hidden="true"></i>
+          <span class="portal-authority-kicker">Question Bank</span>
+        </span>
+        <strong class="portal-authority-value" id="authorityQuestions" data-target="0">0</strong>
+        <span class="portal-authority-label">Total Questions</span>
+      </article>
+      <article class="portal-authority-card">
+        <span class="portal-authority-head">
+          <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+          <span class="portal-authority-kicker">Subjects</span>
+        </span>
+        <strong class="portal-authority-value" id="authoritySubjects" data-target="0">0</strong>
+        <span class="portal-authority-label">Uploaded Subjects</span>
+      </article>
+      <article class="portal-authority-card">
+        <span class="portal-authority-head">
+          <i class="fas fa-users" aria-hidden="true"></i>
+          <span class="portal-authority-kicker">Students</span>
+        </span>
+        <strong class="portal-authority-value" id="authorityStudents" data-target="0">0</strong>
+        <span class="portal-authority-label">Registered Learners</span>
+      </article>
+    </section>
+
+    <section class="portal-section-head">
+      <div>
+        <span class="eyebrow">Explore subjects</span>
+        <h2>Computer Science preparation paths</h2>
+      </div>
+      <a class="btn btn-outline" href="questions/index.html">Browse Public Questions</a>
+    </section>
+
+    <section class="portal-subject-grid" aria-label="GATE CS subjects">
+      <a id="digital-electronics" data-course-card data-search="digital electronics logic gates counters flip flops boolean algebra" href="questions/course-digital-electronics.html"><i class="fas fa-microchip"></i><strong>Digital Electronics</strong><span>Logic gates, counters, flip-flops</span></a>
+      <a id="data-structures" data-course-card data-search="data structures arrays trees hashing graphs stacks queues linked list" href="questions/course-data-structures.html"><i class="fas fa-diagram-project"></i><strong>Data Structures</strong><span>Arrays, trees, hashing, graphs</span></a>
+      <a id="algorithms" data-course-card data-search="algorithms sorting greedy dynamic programming graph algorithms dijkstra" href="questions/course-algorithms.html"><i class="fas fa-route"></i><strong>Algorithms</strong><span>Sorting, greedy, DP, graph algorithms</span></a>
+      <a id="dbms" data-course-card data-search="dbms database sql normalization transactions relational algebra" href="questions/course-dbms.html"><i class="fas fa-database"></i><strong>DBMS</strong><span>SQL, normalization, transactions</span></a>
+      <a id="operating-system" data-course-card data-search="operating system os cpu scheduling memory management deadlock process" href="questions/course-operating-system.html"><i class="fas fa-desktop"></i><strong>Operating System</strong><span>CPU scheduling, memory, deadlock</span></a>
+      <a id="computer-networks" data-course-card data-search="computer networks tcp ip dns subnetting error detection osi" href="questions/course-computer-networks.html"><i class="fas fa-network-wired"></i><strong>Computer Networks</strong><span>TCP/IP, DNS, subnetting, errors</span></a>
+      <a id="computer-organization" data-course-card data-search="computer organization cache pipelining hazards two's complement number representation" href="questions/course-computer-organization.html"><i class="fas fa-memory"></i><strong>Computer Organization</strong><span>Cache, pipelining, number representation</span></a>
+      <a id="theory-of-computation" data-course-card data-search="theory of computation toc dfa cfg decidability automata halting" href="questions/course-theory-of-computation.html"><i class="fas fa-code-branch"></i><strong>Theory of Computation</strong><span>DFA, CFG, decidability</span></a>
+      <a id="discrete-mathematics" data-course-card data-search="discrete mathematics sets combinatorics trees power set permutations" href="questions/course-discrete-mathematics.html"><i class="fas fa-square-root-variable"></i><strong>Discrete Mathematics</strong><span>Sets, combinatorics, trees</span></a>
+    </section>
+
+    <section class="portal-section-head">
+      <div>
+        <span class="eyebrow">Sponsored practice</span>
+        <h2>Recommended resources for GATE CS</h2>
+      </div>
+    </section>
+
+    <section class="portal-ad-grid" aria-label="Sponsored resources">
+      <div class="ad-slot wide">
+        <span>Advertisement</span>
+        <strong>GATE CS Crash Revision</strong>
+        <p>Promote subject-wise notes, formula sheets, or a course offer here.</p>
+      </div>
+      <div class="ad-slot wide">
+        <span>Advertisement</span>
+        <strong>GATE CS Mock Test Series (2026)</strong>
+        <p>120 full-length mocks, all-India rank, and detailed analytics for exam-style practice.</p>
+      </div>
+      <div class="ad-slot wide">
+        <span>Advertisement</span>
+        <strong>Interview + GATE Bundle</strong>
+        <p>Use this slot for books, coaching, mentoring, or partner content.</p>
+      </div>
+    </section>
+
+    <section class="portal-section-head">
+      <div>
+        <span class="eyebrow">Free vs paid</span>
+        <h2>Choose your practice mode after sign in</h2>
+      </div>
+    </section>
+
+    <section class="portal-plan-grid">
+      <article class="content-card">
+        <i class="fas fa-unlock"></i>
+        <h2>Free Version</h2>
+        <p>Access question bank, search, filters, bookmarks, revision, comments, and ad-supported practice.</p>
+        <a class="btn btn-primary" href="signin.html?redirect=free.html">Sign In for Free</a>
+      </article>
+      <article class="content-card pricing-featured">
+        <i class="fas fa-crown"></i>
+        <h2>Paid Version</h2>
+        <p>Unlock quiz studio, mock tests, analytics, mistake review, and ad-free premium practice.</p>
+        <a class="btn btn-primary" href="signin.html?redirect=paid-dashboard.html">Sign In for Paid</a>
+      </article>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="questions/index.html">Public Question Library</a>
+    <span>Copyright 2026 CS4GATE</span>
+  </footer>
+  <script>
+    const portalInput = document.getElementById("portalSearchInput");
+    const portalResults = document.getElementById("portalSearchResults");
+    const courseCards = [...document.querySelectorAll("[data-course-card]")];
+    const searchForm = document.getElementById("portalSearchForm");
+
+    function updatePortalSearch() {
+      const query = portalInput.value.trim().toLowerCase();
+      const matches = courseCards.filter(card => {
+        const text = `${card.textContent} ${card.dataset.search || ""}`.toLowerCase();
+        return !query || text.includes(query);
+      });
+      courseCards.forEach(card => {
+        card.classList.toggle("is-dimmed", query && !matches.includes(card));
+        card.classList.toggle("is-search-match", query && matches.includes(card));
+      });
+      if (!query) {
+        portalResults.innerHTML = "";
+        return;
+      }
+      portalResults.innerHTML = "";
+      if (!matches.length) {
+        portalResults.innerHTML = "<p>No course matched. Try DBMS, OS, DSA, algorithms, or networks.</p>";
+        return;
+      }
+      matches.slice(0, 5).forEach(card => {
+        const link = document.createElement("a");
+        const title = document.createElement("strong");
+        const meta = document.createElement("span");
+        link.href = card.getAttribute("href") || "#";
+        title.textContent = card.querySelector("strong")?.textContent || "Course";
+        meta.textContent = card.querySelector("span")?.textContent || "Practice";
+        link.append(title, meta);
+        portalResults.appendChild(link);
+      });
+    }
+
+    portalInput?.addEventListener("input", updatePortalSearch);
+    searchForm?.addEventListener("submit", event => {
+      const firstMatch = document.querySelector("[data-course-card].is-search-match");
+      if (firstMatch) {
+        event.preventDefault();
+        window.location.href = firstMatch.getAttribute("href");
+      }
+    });
+
+    function formatStatNumber(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return "0";
+      return new Intl.NumberFormat("en-IN").format(Math.max(0, Math.trunc(numeric)));
+    }
+
+    function animateStat(el, target) {
+      if (!el) return;
+      const safeTarget = Math.max(0, Math.trunc(Number(target) || 0));
+      const start = 0;
+      const duration = 900;
+      const startedAt = performance.now();
+      function tick(now) {
+        const elapsed = now - startedAt;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(start + (safeTarget - start) * eased);
+        el.textContent = formatStatNumber(value);
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.textContent = formatStatNumber(safeTarget);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    async function loadAuthorityStats() {
+      const questionEl = document.getElementById("authorityQuestions");
+      const subjectEl = document.getElementById("authoritySubjects");
+      const studentEl = document.getElementById("authorityStudents");
+      if (!questionEl || !subjectEl || !studentEl) return;
+
+      try {
+        const res = await fetch("api/questions.php?meta=home_stats", { cache: "no-store" });
+        const data = await res.json();
+        if (!res.ok) throw new Error("home stats api failed");
+        animateStat(questionEl, data?.questions?.total ?? 0);
+        animateStat(subjectEl, data?.subjects?.uploaded ?? 0);
+        animateStat(studentEl, data?.students?.total ?? 0);
+      } catch {
+        questionEl.textContent = "0";
+        subjectEl.textContent = "0";
+        studentEl.textContent = "0";
+      }
+    }
+
+    loadAuthorityStats();
+  </script>
+  <script src="thumb-placeholders.js?v=20260531group2"></script>
+  <script src="landing-theme.js?v=20260531contrast1"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+

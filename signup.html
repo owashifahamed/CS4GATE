@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><script src="static-data.js"></script><script src="static-api.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up - CS4GATE</title>
+  <meta name="description" content="Create a CS4GATE account for free GATE Computer Science practice. Paid access is enabled after upgrade.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://cs4gate.com/signup.html">
+  <link rel="stylesheet" href="style.css?v=20260531contrast1">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-brand">
+      <a class="auth-logo" href="index.html">CS4GATE</a>
+      <h1>Create your study profile</h1>
+      <p>Create a secure free account now. Verify your Gmail/email inbox before signing in.</p>
+      <div class="auth-demo-box">
+        <strong>Email verification</strong>
+        <span>Use an inbox you can open. CS4GATE sends a verification link after signup.</span>
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <div class="panel-title">
+        <i class="fas fa-user-plus"></i>
+        <div>
+          <h2>Sign Up</h2>
+          <p>Create your account and verify your email.</p>
+        </div>
+      </div>
+      <form id="signupForm" class="auth-form">
+        <label>
+          <span>Name</span>
+          <input id="name" type="text" placeholder="Your name" required>
+        </label>
+        <label>
+          <span>Gmail / Email</span>
+          <input id="email" type="email" placeholder="you@gmail.com" required>
+        </label>
+        <label>
+          <span>Target Year</span>
+          <select id="targetYear" required>
+            <option value="2026">GATE 2026</option>
+            <option value="2027">GATE 2027</option>
+            <option value="2028">GATE 2028</option>
+          </select>
+        </label>
+        <label>
+          <span>Plan</span>
+          <input type="text" value="Free (default on signup)" readonly>
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="password" type="password" placeholder="Minimum 6 characters" required>
+        </label>
+        <label>
+          <span>Confirm Password</span>
+          <input id="confirmPassword" type="password" placeholder="Repeat password" required>
+        </label>
+        <label>
+          <span id="captchaQuestion">Bot check</span>
+          <input id="captchaAnswer" type="text" inputmode="numeric" placeholder="Answer the question" required>
+        </label>
+        <div id="authMessage" class="auth-message"></div>
+        <button class="btn btn-primary auth-submit" type="submit"><i class="fas fa-user-check"></i> Create Account</button>
+      </form>
+      <p class="auth-switch">Already have an account? <a href="signin.html">Sign in</a></p>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <a href="index.html">Home</a>
+    <a href="questions/index.html">Question Bank</a>
+    <a href="paid.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <span>Copyright 2026 CS4GATE</span>
+  </footer>
+
+  <script src="auth.js?v=20260531contrast1"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
