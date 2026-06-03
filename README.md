@@ -35,14 +35,6 @@ cd github-pages-clone
 npx serve .
 ```
 
-## Deploy To GitHub Pages
-
-1. Create a GitHub repository.
-2. Upload the contents of this folder to the repository root.
-3. Open repository **Settings > Pages**.
-4. Set the source to **Deploy from a branch**.
-5. Select the branch and `/ (root)` folder.
-
 ## Static Demo Limits
 
 - Data is stored per browser/device in `localStorage`.
