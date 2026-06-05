@@ -1,16 +1,5 @@
 User-agent: *
-Disallow: /admin.html
-Disallow: /dashboard.html
-Disallow: /free.html
-Disallow: /paid-dashboard.html
-Disallow: /analytics.html
-Disallow: /quiz.html
-Disallow: /mock-test.html
-Disallow: /question.html
-Disallow: /signin.html
-Disallow: /signup.html
-Disallow: /forgot-password.html
-Disallow: /reset-password.html
-Disallow: /api/
+Disallow: /
 
-Sitemap: https://cs4gate.com/sitemap.xml
+# This GitHub Pages project is a static demo clone for portfolio viewing.
+# The real live website is https://cs4gate.com/.

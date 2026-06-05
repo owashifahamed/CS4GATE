@@ -241,13 +241,13 @@
       "question": "\u003cp>Which of the following grows fastest as n becomes very large?\u003c/p>",
       "options": [
         "n log n",
-        "nÂ²",
+        "n²",
         "2^n",
-        "nÂ³"
+        "n³"
       ],
       "answer": "2^n",
       "theory": "\u003ch3>Growth of Functions\u003c/h3>\u003cp>Exponential functions grow faster than polynomial and logarithmic functions.\u003c/p>",
-      "solution": "\u003cul>\u003cli>n log n is smaller than nÂ².\u003c/li>\u003cli>nÂ² is smaller than nÂ³.\u003c/li>\u003cli>Exponential growth dominates polynomial growth.\u003c/li>\u003cli>Therefore 2^n grows fastest.\u003c/li>\u003c/ul>",
+      "solution": "\u003cul>\u003cli>n log n is smaller than n².\u003c/li>\u003cli>n² is smaller than n³.\u003c/li>\u003cli>Exponential growth dominates polynomial growth.\u003c/li>\u003cli>Therefore 2^n grows fastest.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -282,7 +282,7 @@
       "difficulty": "Medium",
       "question": "\u003cp>What is the worst-case time complexity of Merge Sort?\u003c/p>",
       "options": [
-        "O(nÂ²)",
+        "O(n²)",
         "O(log n)",
         "O(n log n)",
         "O(n)"
@@ -667,7 +667,7 @@
       ],
       "answer": "45",
       "theory": "\u003ch3>Binary to Decimal Conversion\u003c/h3>\u003cp>Each binary digit represents a power of 2 based on its position.\u003c/p>",
-      "solution": "\u003cul>\u003cli>101101_2= 1Ã—2^5+ 0Ã—2^4+ 1Ã—2Â³ + 1Ã—2Â² + 0Ã—2Â¹ + 1Ã—2^0\u003c/li>\u003cli>= 32 + 0 + 8 + 4 + 0 + 1\u003c/li>\u003cli>= 45\u003c/li>\u003cli>Therefore the decimal equivalent is 45.\u003c/li>\u003c/ul>",
+      "solution": "\u003cul>\u003cli>101101_2= 1Ã—2^5+ 0Ã—2^4+ 1Ã—2³ + 1Ã—2² + 0Ã—2¹ + 1Ã—2^0\u003c/li>\u003cli>= 32 + 0 + 8 + 4 + 0 + 1\u003c/li>\u003cli>= 45\u003c/li>\u003cli>Therefore the decimal equivalent is 45.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -973,7 +973,7 @@
       "year": "2026",
       "type": "MCQ",
       "difficulty": "Easy",
-      "question": "\u003cp>Which logical operator is represented by the symbol âˆ§?\u003c/p>",
+      "question": "\u003cp>Which logical operator is represented by the symbol ∧?\u003c/p>",
       "options": [
         "OR",
         "NOT",
@@ -981,8 +981,8 @@
         "AND"
       ],
       "answer": "AND",
-      "theory": "\u003ch3>Logical Connectives\u003c/h3>\u003cp>The symbol âˆ§represents conjunction, which is true only when both operands are true.\u003c/p>",
-      "solution": "\u003cul>\u003cli>âˆ§denotes conjunction.\u003c/li>\u003cli>Conjunction corresponds to logical AND.\u003c/li>\u003cli>Both statements must be true.\u003c/li>\u003cli>Therefore the answer is AND.\u003c/li>\u003c/ul>",
+      "theory": "\u003ch3>Logical Connectives\u003c/h3>\u003cp>The symbol ∧represents conjunction, which is true only when both operands are true.\u003c/p>",
+      "solution": "\u003cul>\u003cli>∧denotes conjunction.\u003c/li>\u003cli>Conjunction corresponds to logical AND.\u003c/li>\u003cli>Both statements must be true.\u003c/li>\u003cli>Therefore the answer is AND.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -994,7 +994,7 @@
       "year": "2026",
       "type": "MCQ",
       "difficulty": "Easy",
-      "question": "\u003cp>If A = {1,2,3} and B = {3,4,5}, then A âˆ©B is:\u003c/p>",
+      "question": "\u003cp>If A = {1,2,3} and B = {3,4,5}, then A ∩B is:\u003c/p>",
       "options": [
         "{1,2,3,4,5}",
         "{3}",
@@ -1003,7 +1003,7 @@
       ],
       "answer": "{3}",
       "theory": "\u003ch3>Intersection of Sets\u003c/h3>\u003cp>The intersection of two sets contains elements common to both sets.\u003c/p>",
-      "solution": "\u003cul>\u003cli>A = {1,2,3}\u003c/li>\u003cli>B = {3,4,5}\u003c/li>\u003cli>Common element = 3\u003c/li>\u003cli>Therefore A âˆ©B = {3}.\u003c/li>\u003c/ul>",
+      "solution": "\u003cul>\u003cli>A = {1,2,3}\u003c/li>\u003cli>B = {3,4,5}\u003c/li>\u003cli>Common element = 3\u003c/li>\u003cli>Therefore A ∩B = {3}.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -1087,7 +1087,7 @@
       ],
       "answer": "13",
       "theory": "\u003ch3>Binary to Decimal Conversion\u003c/h3>\u003cp>Each binary digit represents a power of 2.\u003c/p>",
-      "solution": "\u003cul>\u003cli>1101_2= 1Ã—2Â³ + 1Ã—2Â² + 0Ã—2Â¹ + 1Ã—2^0\u003c/li>\u003cli>= 8 + 4 + 0 + 1\u003c/li>\u003cli>= 13\u003c/li>\u003cli>Therefore the answer is 13.\u003c/li>\u003c/ul>",
+      "solution": "\u003cul>\u003cli>1101_2= 1Ã—2³ + 1Ã—2² + 0Ã—2¹ + 1Ã—2^0\u003c/li>\u003cli>= 8 + 4 + 0 + 1\u003c/li>\u003cli>= 13\u003c/li>\u003cli>Therefore the answer is 13.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -1204,16 +1204,16 @@
       "year": "2026",
       "type": "MCQ",
       "difficulty": "Easy",
-      "question": "\u003cp>What is the derivative of xÂ² with respect to x?\u003c/p>",
+      "question": "\u003cp>What is the derivative of x² with respect to x?\u003c/p>",
       "options": [
         "x",
         "2x",
-        "xÂ²",
+        "x²",
         "2"
       ],
       "answer": "2x",
       "theory": "\u003ch3>Differentiation\u003c/h3>\u003cp>For f(x)=x^n, the derivative is n*x^(n-1).\u003c/p>",
-      "solution": "\u003cul>\u003cli>f(x)=xÂ².\u003c/li>\u003cli>Using the power rule:\u003c/li>\u003cli>d(xÂ²)/dx = 2xÂ¹.\u003c/li>\u003cli>= 2x.\u003c/li>\u003c/ul>",
+      "solution": "\u003cul>\u003cli>f(x)=x².\u003c/li>\u003cli>Using the power rule:\u003c/li>\u003cli>d(x²)/dx = 2x¹.\u003c/li>\u003cli>= 2x.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -1246,7 +1246,7 @@
       "year": "2026",
       "type": "MCQ",
       "difficulty": "Medium",
-      "question": "\u003cp>What is the order of the differential equation dÂ²y/dxÂ² + 3dy/dx + y = 0 ?\u003c/p>",
+      "question": "\u003cp>What is the order of the differential equation d²y/dx² + 3dy/dx + y = 0 ?\u003c/p>",
       "options": [
         "1",
         "2",
@@ -1255,7 +1255,7 @@
       ],
       "answer": "2",
       "theory": "\u003ch3>Order of Differential Equation\u003c/h3>\u003cp>The order is the highest derivative present in the equation.\u003c/p>",
-      "solution": "\u003cul>\u003cli>The equation contains dÂ²y/dxÂ².\u003c/li>\u003cli>This is the highest derivative.\u003c/li>\u003cli>Its order is 2.\u003c/li>\u003cli>Hence the answer is 2.\u003c/li>\u003c/ul>",
+      "solution": "\u003cul>\u003cli>The equation contains d²y/dx².\u003c/li>\u003cli>This is the highest derivative.\u003c/li>\u003cli>Its order is 2.\u003c/li>\u003cli>Hence the answer is 2.\u003c/li>\u003c/ul>",
       "updated_at": "2026-06-03 12:00:00"
     },
     {
@@ -1612,30 +1612,52 @@
   }
 };
 
+  const liveSiteUrl = "https://cs4gate.com/";
+  const demoNotice = "Demo portfolio clone of CS4GATE. This GitHub project is a static demo; use the live website for the real production experience.";
   const licenseNotice = "Copyright (c) 2026 Sk Owashif Ahamed. Viewing and portfolio use only. Unauthorized copying, modification, distribution, or use is prohibited.";
 
   if (typeof console !== "undefined") {
+    console.info(demoNotice);
     console.info(licenseNotice);
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    if (document.querySelector("[data-license-notice]")) {
-      return;
+  function markDemoMetadata() {
+    if (!document.title.toLowerCase().includes("demo")) {
+      document.title = `Demo Clone - ${document.title}`;
     }
 
-    const footerNotice = document.createElement("div");
-    footerNotice.setAttribute("data-license-notice", "true");
-    footerNotice.textContent = licenseNotice;
-    footerNotice.style.cssText = [
-      "font: 12px/1.4 system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      "color: #64748b",
-      "background: #f8fafc",
-      "border-top: 1px solid #e2e8f0",
-      "padding: 10px 16px",
-      "text-align: center"
-    ].join(";");
+    const description = document.querySelector('meta[name="description"]');
+    if (description && !description.content.toLowerCase().includes("demo")) {
+      description.content = `Demo portfolio clone of CS4GATE. ${description.content}`;
+    }
+  }
 
-    document.body.appendChild(footerNotice);
+  document.addEventListener("DOMContentLoaded", function () {
+    markDemoMetadata();
+    document.body.classList.add("cs4gate-demo-site");
+
+    if (!document.querySelector("[data-demo-notice]")) {
+      const banner = document.createElement("aside");
+      banner.className = "demo-site-banner";
+      banner.setAttribute("data-demo-notice", "true");
+      banner.setAttribute("aria-label", "Demo website notice");
+      banner.innerHTML = [
+        '<div class="demo-site-banner__copy">',
+        '<strong>Demo Website</strong>',
+        '<span>This GitHub Pages project is a static demo clone of CS4GATE for portfolio viewing. It is not the live production website.</span>',
+        "</div>",
+        `<a class="demo-site-banner__button" href="${liveSiteUrl}" target="_blank" rel="noopener noreferrer">Open Live Website</a>`
+      ].join("");
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+
+    if (!document.querySelector("[data-license-notice]")) {
+      const footerNotice = document.createElement("div");
+      footerNotice.className = "license-site-notice";
+      footerNotice.setAttribute("data-license-notice", "true");
+      footerNotice.textContent = licenseNotice;
+      document.body.appendChild(footerNotice);
+    }
   });
 })();
 

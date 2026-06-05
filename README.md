@@ -1,12 +1,32 @@
-# SOA GATE Static Demo
+# CS4GATE Static Demo Clone
 
-This folder is a front-end-only clone of the CS4GATE website for GitHub Pages.
+This repository is a front-end-only **demo clone** of the CS4GATE website for GitHub Pages and portfolio review.
+
+It is not the production website. The real live CS4GATE website is available at:
+
+**https://cs4gate.com/**
+
+Every page in this demo shows a demo notice and an **Open Live Website** button that points users to the real site.
+
+## Demo Purpose
+
+- Show the project UI, page structure, question flows, and static GitHub Pages deployment.
+- Provide a portfolio-friendly preview of the CS4GATE experience.
+- Keep real production usage directed to the live website at `https://cs4gate.com/`.
+
+## Demo Limits
+
+- This is a static browser-based demo, not the production backend.
+- Demo accounts, local progress, comments, admin edits, and dashboard data are simulated in browser storage.
+- Any live learning, account, payment, or production activity should happen on the real website.
 
 ## License
 
 Copyright (c) 2026 Sk Owashif Ahamed. All rights reserved.
 
 This project is provided for viewing and portfolio purposes only. No permission is granted to copy, modify, distribute, or use this code without written permission from the copyright holder. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+## Technical Overview
 
 It uses:
 
@@ -35,7 +55,15 @@ cd github-pages-clone
 npx serve .
 ```
 
-## Static Demo Limits
+## Deploy To GitHub Pages
+
+1. Create a GitHub repository.
+2. Upload the contents of this folder to the repository root.
+3. Open repository **Settings > Pages**.
+4. Set the source to **Deploy from a branch**.
+5. Select the branch and `/ (root)` folder.
+
+## Static Storage Limits
 
 - Data is stored per browser/device in `localStorage`.
 - Admin edits do not change files in the GitHub repository.
